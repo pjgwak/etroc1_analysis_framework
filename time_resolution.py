@@ -132,8 +132,6 @@ def draw_fit_plot(board_number, centers, contents, norm, mean, sigma):
 
 def main():
     file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV210'
-    bPop_up_gauss_fit = True
-    
     b0_corr = pd.read_csv(file_name + '_b0_corr.txt', delimiter = '\s+', header=None)
     b0_corr.columns = ['toa', 'tot', 'delta_toa', 'corr_toa']
     b1_corr = pd.read_csv(file_name + '_b1_corr.txt', delimiter = '\s+', header=None)

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 codes_data = pd.read_csv("2021-05-24_Array_Test_Results/B1P9_F11P9_B2P9_Beam_0524_F11HV210.txt", delimiter = '\s+', header=None)
-save_file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV210'
+file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV210'
 
 # codes_data = pd.read_csv("txt", delimiter = '\s+', header=None)
 codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag']
@@ -19,7 +19,7 @@ print("Read data: Done")
 # 1. exclude flag 0 signals
 # 2. check 0, 1, 3 pattern
 raw_cal_codes = codes_data[['board', 'cal_code']]
-raw_cal_codes.to_csv(save_file_name+'_cal_codes.txt', sep='\t', index=None, header=None)
+raw_cal_codes.to_csv(file_name+'_cal_codes.txt', sep='\t', index=None, header=None)
 print("Save raw cal codes to txt")
 
 selected_data = codes_data.loc[codes_data['flag'] >= 1]
@@ -55,7 +55,7 @@ print(selected_data)
 print("Transform raw codes to time (ns): Done")
 
 #  Save the selected events to txt file
-selected_data.to_csv(save_file_name+'.txt', sep='\t', index=None, header=None)
+selected_data.to_csv(file_name+'.txt', sep='\t', index=None, header=None)
 print("Save the selected_data to txt")
 
 #a[a.loc[codes_data['board']==3]['toa']]

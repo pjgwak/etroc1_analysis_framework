@@ -115,7 +115,8 @@ def main():
     b3_data.reset_index(inplace=True,drop=True)
 
     # Make lists for cuts
-    # toa lower, toa upper, tot lower, tot upper, cal lower and cal upper limits
+    # toa_code lower, toa_code upper, tot_code lower, tot_code upper, cal_code lower
+    # and cal_code upper limits
     b0_cuts = [150, 300, 55, 120, 100, 300]
     b1_cuts = [150, 300, 50, 100, 100, 300]
     b3_cuts = [150, 300, 70, 130, 100, 300]

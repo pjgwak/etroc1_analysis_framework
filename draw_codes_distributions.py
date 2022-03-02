@@ -69,33 +69,36 @@ def draw_tot_toa(ax, input_data, board_number, bTdc=False):
 # draw properties of a board
 def draw_board(input_data, read_raw_cal):
     px = 1/plt.rcParams['figure.dpi']  # pixel in inches
-    fig, ax = plt.subplots(4,3, constrained_layout=True, figsize=(1600*px, 1600*px))
+    fig, ax = plt.subplots(3,4, constrained_layout=True, figsize=(1800*px, 1200*px))
     
     board_number = 0
     draw_tot_toa_code(ax[0,0], input_data,board_number)
     draw_toa_code(ax[0,1], input_data,board_number)
     draw_tot_code(ax[0,2], input_data,board_number)
+    draw_cal_code(ax[0,3], input_data,board_number)
     
     board_number = 1
     draw_tot_toa_code(ax[1,0], input_data,board_number)
     draw_toa_code(ax[1,1], input_data,board_number)
     draw_tot_code(ax[1,2], input_data,board_number)
+    draw_cal_code(ax[1,3], input_data,board_number)
 
     board_number = 3
     draw_tot_toa_code(ax[2,0], input_data,board_number)
     draw_toa_code(ax[2,1], input_data,board_number)
     draw_tot_code(ax[2,2], input_data,board_number)
+    draw_cal_code(ax[2,3], input_data,board_number)
     
     plt.savefig('plots/board'+ str(board_number) + '_properties.pdf')
     #plt.show()
 
 
 def main():
-    file_name =     '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV210'
+    file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV210'
     
     read_data = pd.read_csv(file_name + '.txt', delimiter = '\s+', header=None)
-    read_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'toa',    'tot']
-    read_raw_cal = pd.read_csv(file_name + '_cal_codes.txt', delimiter =    '\s+', header=None)
+    read_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'toa', 'tot']
+    read_raw_cal = pd.read_csv(file_name + '_cal_codes.txt', delimiter = '\s+', header=None)
     read_raw_cal.columns = ['board', 'cal_code']
     print("Read data: Done")
     
