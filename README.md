@@ -15,7 +15,7 @@
 3. twc_with_delta_toa.py
 - Get toa with TWC (Time Work Correction) from delta_toa
 - Change a 'file_name' as the one of 'data_selection.py'
-- Fill out b0_cuts, b1_cuts and b3_cuts with cuts from 'draw_codes_distributions.py'
+- Fill out b0_cuts, b1_cuts and b3_cuts with cut ranges from 'draw_codes_distributions.py'
 
 4. time_resolution.py
 - Calculate time resolutions of boards
