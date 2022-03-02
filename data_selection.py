@@ -4,9 +4,9 @@ from matplotlib.colors import LogNorm
 import matplotlib.pyplot as plt
 
 
-#codes_data = pd.read_csv("2021-05-24_Array_Test_Results/B1P9_F11P9_B2P9_Beam_0524_F11HV220.txt", delimiter = '\s+', header=None)
-codes_data = pd.read_csv("2021-05-24_Array_Test_Results/B1P9_F11P9_B2P9_QInjRef_0524_After.txt", delimiter = '\s+', header=None)
-file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_QInjRef_0524_After'
+codes_data = pd.read_csv("2021-05-24_Array_Test_Results/B1P9_F11P9_B2P9_Beam_0524_F11HV220.txt", delimiter = '\s+', header=None)
+#codes_data = pd.read_csv("2021-05-24_Array_Test_Results/B1P9_F11P9_B2P9_QInjRef_0524_After.txt", delimiter = '\s+', header=None)
+file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV220'
 
 # codes_data = pd.read_csv("txt", delimiter = '\s+', header=None)
 codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag']
