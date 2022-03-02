@@ -98,7 +98,7 @@ def func(x, a, b, c):
 
 
 def main():
-    file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV210'
+    file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_QInjRef_0524_After'
     
     read_data = pd.read_csv(file_name + '.txt', delimiter = '\s+', header=None)
     read_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'toa',    'tot']
