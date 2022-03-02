@@ -20,5 +20,5 @@
 4. time_resolution.py
 - Calculate time resolutions of boards
 - Change a 'file_name' as the one of 'data_selection.py'
-- You can see the delta_toa gauss distribution by running the code with '--ploting' option
+- You can see the delta_toa gauss distributions by running the code with '--ploting' option
 - Ex) python time_resolution.py --plotting
