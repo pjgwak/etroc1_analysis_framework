@@ -13,34 +13,31 @@ def gauss(x, a, x0, sigma):
     return a * np.exp(-(x - x0) ** 2 / (2 * sigma ** 2))
 
 
-def draw_fit_plot(board_number, centers, contents, norm, mean, sigma):
-    # plt.sca(ax)
-    # print(contents)
-    plt.hist(contents, bins=len(centers), range=[min(contents), max(contents)])
+def draw_fit_plot(board_number, centers, contents, norm, mean, sigma, ax=None):
+    if ax is not None:
+        plt.sca(ax)
+    #plt.hist(contents, bins=len(centers), range=[min(contents), max(contents)])
     fit_y = gauss(centers, norm, mean, sigma)
     plt.plot(centers, contents, 'o', label='data')
     plt.plot(centers, fit_y, '-', label='fit')
-    plt.title('Board ' + str(board_number) + ': delta_ToAs')
+    plt.title('Board ' + str(board_number) + ': delta_ToA')
     plt.xlabel('ToA (ns)')
     plt.ylabel('Counts')
     plt.legend()
     print('Board ', board_number, ': ', 'norm: ', norm, 'mean: ', mean, ', sigma: ', sigma)
-    plt.show()
+    #plt.show()
 
 
-def draw_fit_plot(board_number, centers, contents, norm, mean, sigma):
-    # plt.sca(ax)
-    # print(contents)
-    # plt.hist(contents, bins=len(centers), range=[min(contents), max(contents)])
-    fit_y = gauss(centers, norm, mean, sigma)
-    plt.plot(centers, contents, 'o', label='data')
-    plt.plot(centers, fit_y, '-', label='fit')
-    plt.title('Board ' + str(board_number) + ': delta_ToAs')
-    plt.xlabel('delta ToA (ns)')
-    plt.ylabel('Counts')
-    plt.legend()
-    print('Board ', board_number, ': ', 'norm: ', norm, 'mean: ', mean, ', sigma: ', sigma)
-    plt.show()
+def draw_board(board_lst, center_lst, content_lst, norm_lst, mean_lst, sigma_lst):
+    bDraw = False
+    px = 1/plt.rcParams['figure.dpi']  # pixel in inches
+    fig, ax = plt.subplots(1,4, constrained_layout=True, figsize=(1600*px, 300*px))
+    
+    draw_fit_plot(board_lst[0], center_lst[0], content_lst[0], norm_lst[0], mean_lst[0], sigma_lst[0], ax[0])
+    draw_fit_plot(board_lst[1], center_lst[1], content_lst[1], norm_lst[1], mean_lst[1], sigma_lst[0], ax[1])
+    draw_fit_plot(board_lst[2], center_lst[2], content_lst[2], norm_lst[2], mean_lst[2], sigma_lst[0], ax[2])
+
+    plt.savefig('plots/resolution.pdf')
 
 
 def main():
@@ -61,8 +58,6 @@ def main():
     b3_corr['delta_toa_gauss'] = (b0_corr['corr_toa'] + b1_corr['corr_toa'])*0.5 - b3_corr['corr_toa']
     #print(b0_corr)
     #print(b1_corr)
-    
-    
     
     # Get sigmas
     bins0, edges0 = np.histogram(b0_corr['delta_toa_gauss'].values, 100, density=False)
@@ -90,7 +85,15 @@ def main():
         draw_fit_plot(0, centers0, bins0, norm0, mean0, sigma0)
         draw_fit_plot(1, centers1, bins1, norm1, mean1, sigma1)
         draw_fit_plot(3, centers3, bins3, norm3, mean3, sigma3)
-        
+
+    board_lst = [0,1,3]
+    center_lst = [centers0,centers1,centers3]
+    bin_lst = [bins0,bins1,bins3]
+    norm_lst = [norm0,norm1,norm3]
+    mean_lst = [mean0,mean1,mean3]
+    sigma_lst = [sigma0,sigma1,sigma3]
+
+    draw_board(board_lst, center_lst, bin_lst, norm_lst, mean_lst, sigma_lst)
     
     # Get time resoultions
     # Ex) b0 time resolution

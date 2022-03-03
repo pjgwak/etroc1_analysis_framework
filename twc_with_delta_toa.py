@@ -4,8 +4,77 @@ import numpy as np
 import scipy
 from scipy import optimize as opt
 
-def func(x, a, b, c):
-    return a + b*x + c*x**2
+
+def quad_func(x, a, b, c):
+    return a*x**2 + b*x + c
+
+
+def draw_delta_toa_fit(board_number, input_data, popt, ax=None):
+    if ax is not None:
+        plt.sca(ax)
+    plt.plot(input_data['tot'].values, quad_func(input_data['tot'].values, *popt), 'g--', label='fit: a=%5.3f, b=%5.3f, c=%5.10f' % tuple(popt))
+    plt.hist2d(input_data['tot'], input_data['delta_toa'], bins=[100,100], cmap=plt.cm.jet, cmin=1)
+    plt.title('Board ' + str(board_number) + ': ToT vs delta ToA w/o TWC')
+    plt.xlabel('ToT')
+    plt.ylabel('delta ToA w/o TWC')
+    plt.colorbar()
+    plt.legend()
+    #plt.show()
+
+
+def draw_delta_corr_toa_fit(board_number, input_data, popt, ax=None):
+    if ax is not None:
+        plt.sca(ax)
+    plt.plot(input_data['tot'].values, quad_func(input_data['tot'].values, *popt), 'g--', label='fit: a=%5.3f, b=%5.3f, c=%5.10f' % tuple(popt))
+    plt.hist2d(input_data['tot'], input_data['delta_corr_toa'], bins=[100,100], cmap=plt.cm.jet, cmin=1)
+    plt.title('Board ' + str(board_number) + ': ToT vs delta ToA w/ TWC')
+    plt.xlabel('ToT')
+    plt.ylabel('delta ToA w/ TWC')
+    plt.colorbar()
+    plt.legend()
+    #plt.show()
+    
+
+def draw_toa(ax, input_data, board_number):
+    plt.sca(ax)
+    plt.hist(input_data['toa'], bins=125, range=[0,12.5])
+    plt.title('Board ' + str(board_number) + ': ToA w/ TWC')
+    plt.xlabel('ToA (ns)')
+    plt.ylabel('Counts')
+
+
+def draw_tot(ax, input_data, board_number,bTdc=False):
+    plt.sca(ax)
+    plt.hist(input_data['tot'], bins=200, range=[0,20])
+    plt.title('Board ' + str(board_number) + ': ToT w/ TWC')
+    plt.xlabel('ToT (ns)')
+    plt.ylabel('Counts')
+
+
+def draw_tot_toa(ax, input_data, board_number):
+    plt.sca(ax)
+    plt.hist2d(input_data['tot'], input_data['toa'], cmap=plt.cm.jet, bins=[200,125], range=[[0,20],[0,12.5]], cmin=1)
+    plt.colorbar()
+    plt.title('Board ' + str(board_number) + ': ToT vs ToA w/ TWC')
+    plt.xlabel('ToT (ns)')
+    plt.ylabel('ToA (ns)')
+
+
+def draw_board(board_number, input_data, popt, corr_popt):
+    bDraw = False
+    px = 1/plt.rcParams['figure.dpi']  # pixel in inches
+    fig, ax = plt.subplots(2,3, constrained_layout=True, figsize=(1200*px, 600*px))
+    
+    draw_delta_toa_fit(board_number, input_data,popt, ax[0,0])
+    draw_delta_corr_toa_fit(board_number, input_data,corr_popt, ax[0,1])
+    
+    draw_tot_toa(ax[1,0], input_data,board_number)
+    draw_toa(ax[1,1], input_data,board_number)
+    draw_tot(ax[1,2], input_data,board_number)
+
+    plt.savefig('plots/board'+ str(board_number) + '_plot2.pdf')
+    
+    
 
 
 def main():
@@ -61,35 +130,56 @@ def main():
     #print(b3_twc_delta_data)
     
     
-    popt1, _ = opt.curve_fit(func, b0_twc_delta_data['tot'].values, b0_twc_delta_data['delta_toa'].values)
-    popt2, _ = opt.curve_fit(func, b1_twc_delta_data['tot'].values, b1_twc_delta_data['delta_toa'].values)
-    popt3, _ = opt.curve_fit(func, b3_twc_delta_data['tot'].values, b3_twc_delta_data['delta_toa'].values)
-    #plt.plot(b0_twc_delta_data['tot'].values, func(b0_twc_delta_data['tot'].values, *popt), 'g--', label='fit: a=%5.3f, b=%5.3f, c=%5.10f' % tuple(popt))
-    #plt.hist2d(b0_twc_delta_data['tot'], b0_twc_delta_data['delta_toa'], cmin=1, bins=[500,500])
-    #plt.xlabel('x')
-    #plt.ylabel('y')
-    #plt.legend()
-    #plt.show()
+    popt0, _ = opt.curve_fit(quad_func, b0_twc_delta_data['tot'].values, b0_twc_delta_data['delta_toa'].values)
+    popt1, _ = opt.curve_fit(quad_func, b1_twc_delta_data['tot'].values, b1_twc_delta_data['delta_toa'].values)
+    popt3, _ = opt.curve_fit(quad_func, b3_twc_delta_data['tot'].values, b3_twc_delta_data['delta_toa'].values)
+    #draw_delta_toa_fit(b0_twc_delta_data, popt0)
     
-    #b1
-    #x-axis tot
-    #y-axis (b0_toa + b3_toa)/2 - b1_toa
-    
-    b0_twc_delta_data['corr_toa'] = b0_twc_delta_data['toa'] + func(b0_twc_delta_data['tot'].values, *popt1)
-    b1_twc_delta_data['corr_toa'] = b1_twc_delta_data['toa'] + func(b1_twc_delta_data['tot'].values, *popt2)
-    b3_twc_delta_data['corr_toa'] = b3_twc_delta_data['toa'] + func(b3_twc_delta_data['tot'].values, *popt3)
+    # Calculate toa w/ TWC
+    #x-axis ToT
+    #y-axis B1 TOA: (b0_toa + b3_toa)/2 - b1_toa
+    b0_twc_delta_data['corr_toa'] = b0_twc_delta_data['toa'] + quad_func(b0_twc_delta_data['tot'].values, *popt0)
+    b1_twc_delta_data['corr_toa'] = b1_twc_delta_data['toa'] + quad_func(b1_twc_delta_data['tot'].values, *popt1)
+    b3_twc_delta_data['corr_toa'] = b3_twc_delta_data['toa'] + quad_func(b3_twc_delta_data['tot'].values, *popt3)
     
     #print(b0_twc_delta_data)
     #print(b1_twc_delta_data)
     #print(b3_twc_delta_data)
-    print(b3_twc_delta_data)
     b0_twc_delta_data.to_csv(file_name+'_b0_corr.txt', sep='\t', index=None, header=None)
     b1_twc_delta_data.to_csv(file_name+'_b1_corr.txt', sep='\t', index=None, header=None)
     b3_twc_delta_data.to_csv(file_name+'_b3_corr.txt', sep='\t', index=None, header=None)
+
+
+    # To draw delta ToA with corrected ToA.
+    # Don't need to save.
+    b0_twc_delta_data['delta_corr_toa'] = (b1_twc_delta_data['corr_toa'] + b3_twc_delta_data['corr_toa'])*0.5 - b0_twc_delta_data['corr_toa']
+    b1_twc_delta_data['delta_corr_toa'] = (b0_twc_delta_data['corr_toa'] + b3_twc_delta_data['corr_toa'])*0.5 - b1_twc_delta_data['corr_toa']
+    b3_twc_delta_data['delta_corr_toa'] = (b0_twc_delta_data['corr_toa'] + b1_twc_delta_data['corr_toa'])*0.5 - b3_twc_delta_data['corr_toa']
     
-    # TWC
+    corr_popt0, _ = opt.curve_fit(quad_func, b0_twc_delta_data['tot'].values, b0_twc_delta_data['delta_corr_toa'].values)
+    corr_popt1, _ = opt.curve_fit(quad_func, b1_twc_delta_data['tot'].values, b1_twc_delta_data['delta_corr_toa'].values)
+    corr_popt3, _ = opt.curve_fit(quad_func, b3_twc_delta_data['tot'].values, b3_twc_delta_data['delta_corr_toa'].values)
+    
+    
+    # Draw plots
+    draw_board(0, b0_twc_delta_data, popt0, corr_popt0)
+    draw_board(1, b1_twc_delta_data, popt1, corr_popt1)
+    draw_board(3, b3_twc_delta_data, popt3, corr_popt3)
+    
+    
     
 
 if __name__ == '__main__':
     main()
 
+
+
+#fit_y = gauss(centers, norm, mean, sigma)
+#plt.plot(centers, contents, 'o', label='data')
+#plt.plot(centers, fit_y, '-', label='fit')
+#plt.title('Board ' + str(board_number) + ': delta_ToAs')
+#plt.xlabel('delta ToA (ns)')
+#plt.ylabel('Counts')
+#plt.legend()
+#print('Board ', board_number, ': ', 'norm: ', norm, 'mean: ', mean, ', sigma: ', sigma)
+#plt.show()
