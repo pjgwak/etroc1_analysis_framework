@@ -112,8 +112,8 @@ def draw_tot_toa(ax, input_data, board_number):
 #    draw_toa_code(ax[2,1], input_data,board_number, bDraw)
 #    draw_tot_code(ax[2,2], input_data,board_number, bDraw)
 #    draw_cal_code(ax[2,3], input_data,board_number, bDraw)
-#    #plt.savefig('plots/board'+ str(board_number) + '_properties.pdf')
-#    plt.savefig('plots/raw_codes_summary.pdf')
+#    #plt.savefig('plots/board'+ str(board_number) + '_properties.png')
+#    plt.savefig('plots/raw_codes_summary.png')
 
 
 def draw_board(board_number, input_data, read_raw_cal):
@@ -133,7 +133,7 @@ def draw_board(board_number, input_data, read_raw_cal):
     # cal code passign hit flag1 and 0, 1 and 3 pattern
     #draw_cal_code(ax[1,3], input_data,board_number)
 
-    plt.savefig('plots/board'+ str(board_number) + '_plot1.pdf')
+    plt.savefig('plots/board'+ str(board_number) + '_plot1.png')
 
 
 def main():

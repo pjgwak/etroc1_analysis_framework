@@ -72,7 +72,7 @@ def draw_board(board_number, input_data, popt, corr_popt):
     draw_toa(ax[1,1], input_data,board_number)
     draw_tot(ax[1,2], input_data,board_number)
 
-    plt.savefig('plots/board'+ str(board_number) + '_plot2.pdf')
+    plt.savefig('plots/board'+ str(board_number) + '_plot2.png')
     
     
 

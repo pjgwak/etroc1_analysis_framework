@@ -37,7 +37,7 @@ def draw_board(board_lst, center_lst, content_lst, norm_lst, mean_lst, sigma_lst
     draw_fit_plot(board_lst[1], center_lst[1], content_lst[1], norm_lst[1], mean_lst[1], sigma_lst[0], ax[1])
     draw_fit_plot(board_lst[2], center_lst[2], content_lst[2], norm_lst[2], mean_lst[2], sigma_lst[0], ax[2])
 
-    plt.savefig('plots/resolution.pdf')
+    plt.savefig('plots/resolution.png')
 
 
 def main():
