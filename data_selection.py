@@ -4,13 +4,16 @@ from matplotlib.colors import LogNorm
 import matplotlib.pyplot as plt
 
 
-codes_data = pd.read_csv("2021-05-24_Array_Test_Results/B1P9_F11P9_B2P9_Beam_0524_F11HV220.txt", delimiter = '\s+', header=None)
+codes_data = pd.read_csv("data/F9P5_F11P5_F5P9_Beam_0324.txt", delimiter = '\s+', header=None, on_bad_lines='skip')
 #codes_data = pd.read_csv("2021-05-24_Array_Test_Results/B1P9_F11P9_B2P9_QInjRef_0524_After.txt", delimiter = '\s+', header=None)
-file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV220'
+file_name = '2022-03-24_Array_Test_Results_F9P5_F11P5_F5P9'
 
 # codes_data = pd.read_csv("txt", delimiter = '\s+', header=None)
-codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag']
+codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'date', 'time']
 print("Read data: Done")
+
+codes_data = codes_data.drop(['date', 'time'], axis=1)
+print('Drop date and time columns')
 
 # print test
 # print(codes_data.head)
@@ -29,7 +32,7 @@ print("Exclude flag 0 cases: Done")
 #  print(selected_data)
 
 pattern = [0, 1, 3]
-matched = selected_data.rolling(len(pattern)).apply(lambda x: all(np.equal(x, pattern)), raw=True)  
+matched = selected_data.rolling(len(pattern)).apply(lambda x: all(np.equal(x, pattern)), raw=True)
 # 'raw=True' -> Handle as numpy array instead of Pandas' DataFrame -> Much Faster
 matched = matched.sum(axis = 1).astype(bool)   #Sum to perform boolean OR
 idx_matched = np.where(matched)[0]
