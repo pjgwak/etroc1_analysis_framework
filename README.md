@@ -3,8 +3,8 @@
 ### Workflow
 1. data_selection.py
 - Read experimental data and select good event (hit flag 1 and board numbers are 0, 1, 3 sequentially)
-- Chage a path for 'codes_data' variable.
-- Change a 'file_name' variable. It is used for every codes below
+- Command: `python data_selection.py`
+- If you want to print data frame, add `--p` option behind the command.
 
 2. draw_codes_distributions.py
 - Draw raw data distributions e.g. ToA, ToT, CAL codes etc...
@@ -18,6 +18,4 @@
 
 4. time_resolution.py
 - Calculate time resolutions of boards
-- Change a 'file_name' as the one of 'data_selection.py'
-- You can see the delta_toa gauss distributions by running the code with '--plotting' option
-- Ex) python time_resolution.py --plotting
+- Command: `python time_resolution.py`
