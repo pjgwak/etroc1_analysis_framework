@@ -7,15 +7,9 @@
 - Change a 'file_name' variable. It is used for every codes below
 
 2. draw_codes_distributions.py
-- Draw distributionss of toa_codes, tot_codes and cal_code according to boards
-- Result plot is saved into 'plots' folder (please make this folder or change a path for saving)
-- Change a 'file_name' as the one of 'data_selection.py'
-- You have to see the plot and decide proper cut ranges by yourself
-- Use --plot0 options to pop up distributions of board0 one by one. You can zoom in the plot to decide cut range
-- --plot1 and --plot3 work same way like --plot0 for board 1 and 3 respectively
-- To save summary plot add --plotSum option
-- Ex) To check distirbution of board 0 and 3 and to save summary plot, you can use command below   
-- python draw_codes_distributions.py --plot0 --plot3 --plotSum
+- Draw raw data distributions e.g. ToA, ToT, CAL codes etc...
+- Command: `python draw_codes_distributions.py`
+- If you also want to save as pdf format, add `--pdf` option behind the command.
 
 3. twc_with_delta_toa.py
 - Get toa with TWC (Time Work Correction) from delta_toa
