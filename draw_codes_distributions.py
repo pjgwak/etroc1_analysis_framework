@@ -23,7 +23,7 @@ def hist2d(ax, input_data, board_number, v1='tot_code', v2='toa_code', num_bins=
     if ax is not None:
         plt.sca(ax)
     data = input_data.loc[input_data['board'] == board_number]
-    ax.hist2d(data[v1], data[v2], cmap=plt.cm.jet, bins=num_bins, range=range_hist, cmin=1)
+    plt.hist2d(data[v1], data[v2], cmap=plt.cm.jet, bins=num_bins, range=range_hist, cmin=1)
     plt.colorbar()
     ax.set_title(title)
     ax.set_xlabel(xtitle, fontsize=13)
