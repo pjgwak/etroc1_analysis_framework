@@ -2,7 +2,6 @@ import yaml
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.backends.backend_pdf import PdfPages
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option('--pdf', action='store_true', default=False, dest='PDF')
