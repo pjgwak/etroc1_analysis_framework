@@ -1,3 +1,4 @@
+import yaml
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -28,7 +29,7 @@ def draw_fit_plot(board_number, centers, contents, norm, mean, sigma, ax=None):
     #plt.show()
 
 
-def draw_board(board_lst, center_lst, content_lst, norm_lst, mean_lst, sigma_lst):
+def draw_board(board_lst, center_lst, content_lst, norm_lst, mean_lst, sigma_lst, plot_dir):
     bDraw = False
     px = 1/plt.rcParams['figure.dpi']  # pixel in inches
     fig, ax = plt.subplots(1,4, constrained_layout=True, figsize=(1600*px, 300*px))
@@ -37,16 +38,22 @@ def draw_board(board_lst, center_lst, content_lst, norm_lst, mean_lst, sigma_lst
     draw_fit_plot(board_lst[1], center_lst[1], content_lst[1], norm_lst[1], mean_lst[1], sigma_lst[0], ax[1])
     draw_fit_plot(board_lst[2], center_lst[2], content_lst[2], norm_lst[2], mean_lst[2], sigma_lst[0], ax[2])
 
-    plt.savefig('plots/resolution.png')
+    plt.savefig(plot_dir+'/resolution.png')
 
 
 def main():
-    file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV220'
-    b0_corr = pd.read_csv(file_name + '_b0_corr.txt', delimiter = '\s+', header=None)
+    with open('config.yaml') as f:
+        conf = yaml.load(f, Loader=yaml.FullLoader)
+    dir_path = conf['dir_path']
+    file_name = conf['file_name']
+    plot_dir = dir_path + '/' + file_name + '_plot'
+    sub_file_dir = dir_path + '/' + file_name + '_sub_file'
+    
+    b0_corr = pd.read_csv(sub_file_dir + '/' + file_name + '_b0_corr.txt', delimiter = '\s+', header=None)
     b0_corr.columns = ['toa', 'tot', 'delta_toa', 'corr_toa']
-    b1_corr = pd.read_csv(file_name + '_b1_corr.txt', delimiter = '\s+', header=None)
+    b1_corr = pd.read_csv(sub_file_dir + '/' + file_name + '_b1_corr.txt', delimiter = '\s+', header=None)
     b1_corr.columns = ['toa', 'tot', 'delta_toa', 'corr_toa']
-    b3_corr = pd.read_csv(file_name + '_b3_corr.txt', delimiter = '\s+', header=None)
+    b3_corr = pd.read_csv(sub_file_dir + '/' + file_name + '_b3_corr.txt', delimiter = '\s+', header=None)
     b3_corr.columns = ['toa', 'tot', 'delta_toa', 'corr_toa']
     print("Read data: Done")
     
@@ -93,7 +100,7 @@ def main():
     mean_lst = [mean0,mean1,mean3]
     sigma_lst = [sigma0,sigma1,sigma3]
 
-    draw_board(board_lst, center_lst, bin_lst, norm_lst, mean_lst, sigma_lst)
+    draw_board(board_lst, center_lst, bin_lst, norm_lst, mean_lst, sigma_lst, plot_dir)
     
     # Get time resoultions
     # Ex) b0 time resolution

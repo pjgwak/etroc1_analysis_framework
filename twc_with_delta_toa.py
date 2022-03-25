@@ -1,3 +1,4 @@
+import yaml
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -60,7 +61,7 @@ def draw_tot_toa(ax, input_data, board_number):
     plt.ylabel('ToA (ns)')
 
 
-def draw_board(board_number, input_data, popt, corr_popt):
+def draw_board(board_number, input_data, popt, corr_popt, plot_dir):
     bDraw = False
     px = 1/plt.rcParams['figure.dpi']  # pixel in inches
     fig, ax = plt.subplots(2,3, constrained_layout=True, figsize=(1200*px, 600*px))
@@ -72,17 +73,22 @@ def draw_board(board_number, input_data, popt, corr_popt):
     draw_toa(ax[1,1], input_data,board_number)
     draw_tot(ax[1,2], input_data,board_number)
 
-    plt.savefig('plots/board'+ str(board_number) + '_plot2.png')
+    plt.savefig(plot_dir + '/board'+ str(board_number) + '_plot2.png')
     
     
 
 
 def main():
-    file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV220'
+    with open('config.yaml') as f:
+        conf = yaml.load(f, Loader=yaml.FullLoader)
+    dir_path = conf['dir_path']
+    file_name = conf['file_name']
+    plot_dir = dir_path + '/' + file_name + '_plot'
+    sub_file_dir = dir_path + '/' + file_name + '_sub_file'
     
-    read_data = pd.read_csv(file_name + '.txt', delimiter = '\s+', header=None)
+    read_data = pd.read_csv(sub_file_dir+'/'+file_name+'.txt', delimiter = '\s+', header=None)
     read_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'toa',    'tot']
-    read_raw_cal = pd.read_csv(file_name + '_cal_codes.txt', delimiter =    '\s+', header=None)
+    read_raw_cal = pd.read_csv(sub_file_dir+'/'+file_name+'_cal_codes.txt', delimiter = '\s+', header=None)
     read_raw_cal.columns = ['board', 'cal_code']
     print("Read data: Done")
     
@@ -97,9 +103,9 @@ def main():
     # Make lists for cuts
     # toa_code lower, toa_code upper, tot_code lower, tot_code upper, cal_code lower
     # and cal_code upper limits
-    b0_cuts = [150, 300, 55, 120, 100, 300]
-    b1_cuts = [150, 300, 50, 100, 100, 300]
-    b3_cuts = [150, 300, 70, 130, 100, 300]
+    b0_cuts = [150, 300, 40, 70, 120, 140]
+    b1_cuts = [150, 300, 50, 80, 120, 140]
+    b3_cuts = [150, 300, 60, 80, 120, 140]
     pd.options.mode.chained_assignment = None
 
     # Check toa, tot cut for events of each boards
@@ -145,9 +151,9 @@ def main():
     #print(b0_twc_delta_data)
     #print(b1_twc_delta_data)
     #print(b3_twc_delta_data)
-    b0_twc_delta_data.to_csv(file_name+'_b0_corr.txt', sep='\t', index=None, header=None)
-    b1_twc_delta_data.to_csv(file_name+'_b1_corr.txt', sep='\t', index=None, header=None)
-    b3_twc_delta_data.to_csv(file_name+'_b3_corr.txt', sep='\t', index=None, header=None)
+    b0_twc_delta_data.to_csv(sub_file_dir+'/'+file_name+'_b0_corr.txt', sep='\t', index=None, header=None)
+    b1_twc_delta_data.to_csv(sub_file_dir+'/'+file_name+'_b1_corr.txt', sep='\t', index=None, header=None)
+    b3_twc_delta_data.to_csv(sub_file_dir+'/'+file_name+'_b3_corr.txt', sep='\t', index=None, header=None)
 
 
     # To draw delta ToA with corrected ToA.
@@ -162,9 +168,9 @@ def main():
     
     
     # Draw plots
-    draw_board(0, b0_twc_delta_data, popt0, corr_popt0)
-    draw_board(1, b1_twc_delta_data, popt1, corr_popt1)
-    draw_board(3, b3_twc_delta_data, popt3, corr_popt3)
+    draw_board(0, b0_twc_delta_data, popt0, corr_popt0, plot_dir)
+    draw_board(1, b1_twc_delta_data, popt1, corr_popt1, plot_dir)
+    draw_board(3, b3_twc_delta_data, popt3, corr_popt3, plot_dir)
     
     
     

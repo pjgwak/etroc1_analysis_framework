@@ -1,3 +1,4 @@
+import yaml
 import pandas as pd
 import matplotlib.pyplot as plt
 from optparse import OptionParser
@@ -116,7 +117,7 @@ def draw_tot_toa(ax, input_data, board_number):
 #    plt.savefig('plots/raw_codes_summary.png')
 
 
-def draw_board(board_number, input_data, read_raw_cal):
+def draw_board(board_number, input_data, read_raw_cal, plot_dir):
     bDraw = False
     px = 1/plt.rcParams['figure.dpi']  # pixel in inches
     fig, ax = plt.subplots(2,4, constrained_layout=True, figsize=(1600*px, 800*px))
@@ -133,15 +134,20 @@ def draw_board(board_number, input_data, read_raw_cal):
     # cal code passign hit flag1 and 0, 1 and 3 pattern
     #draw_cal_code(ax[1,3], input_data,board_number)
 
-    plt.savefig('plots/board'+ str(board_number) + '_plot1.png')
+    plt.savefig(plot_dir + '/board'+ str(board_number) + '_plot1.png')
 
 
 def main():
-    file_name = '2021-05-24_Array_Test_Results_B1P9_F11P9_B2P9_Beam_0524_F11HV220'
+    with open('config.yaml') as f:
+        conf = yaml.load(f, Loader=yaml.FullLoader)
+    dir_path = conf['dir_path']
+    file_name = conf['file_name']
+    plot_dir = dir_path + '/' + file_name + '_plot'
+    sub_file_dir = dir_path + '/' + file_name + '_sub_file'
     
-    read_data = pd.read_csv(file_name + '.txt', delimiter = '\s+', header=None)
+    read_data = pd.read_csv(sub_file_dir+'/'+file_name+'.txt', delimiter = '\s+', header=None)
     read_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'toa', 'tot']
-    read_raw_cal = pd.read_csv(file_name + '_cal_codes.txt', delimiter = '\s+', header=None)
+    read_raw_cal = pd.read_csv(sub_file_dir+'/'+file_name+'_cal_codes.txt', delimiter = '\s+', header=None)
     read_raw_cal.columns = ['board', 'cal_code']
     print("Read data: Done")
     
@@ -162,7 +168,7 @@ def main():
     
     if options.plot_summary:
         for board_number in [0, 1, 3]:
-            draw_board(board_number, read_data, read_raw_cal)
+            draw_board(board_number, read_data, read_raw_cal, plot_dir)
     
 
 if __name__ == '__main__':

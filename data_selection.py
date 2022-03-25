@@ -1,19 +1,40 @@
+import os
+import yaml
 import numpy as np
 import pandas as pd
 from matplotlib.colors import LogNorm
 import matplotlib.pyplot as plt
 
 
-codes_data = pd.read_csv("data/F9P5_F11P5_F5P9_Beam_0324.txt", delimiter = '\s+', header=None, on_bad_lines='skip')
+with open('config.yaml') as f:
+    conf = yaml.load(f, Loader=yaml.FullLoader)
+    
+dir_path = conf['dir_path']
+file_name = conf['file_name']
+
+plot_dir = dir_path + '/' + file_name + '_plot'
+sub_file_dir = dir_path + '/' + file_name + '_sub_file'
+
+try:
+    if not os.path.exists(plot_dir):
+        os.makedirs(plot_dir)
+except OSError:
+    print('Error: Cannot creat plot directory')
+    
+try:
+    if not os.path.exists(sub_file_dir):
+        os.makedirs(sub_file_dir)
+except OSError:
+    print('Error: Cannot creat sub file directory')
+
+
+codes_data = pd.read_csv(dir_path + '/' + file_name + '.txt', delimiter = '\s+', header=None, skiprows=1)
 #codes_data = pd.read_csv("2021-05-24_Array_Test_Results/B1P9_F11P9_B2P9_QInjRef_0524_After.txt", delimiter = '\s+', header=None)
-file_name = '2022-03-24_Array_Test_Results_F9P5_F11P5_F5P9'
 
 # codes_data = pd.read_csv("txt", delimiter = '\s+', header=None)
-codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'date', 'time']
+codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'dummy1', 'dummy2']
+codes_data = codes_data.drop(['dummy1', 'dummy2'], axis=1)
 print("Read data: Done")
-
-codes_data = codes_data.drop(['date', 'time'], axis=1)
-print('Drop date and time columns')
 
 # print test
 # print(codes_data.head)
@@ -22,8 +43,11 @@ print('Drop date and time columns')
 # data processing
 # 1. exclude flag 0 signals
 # 2. check 0, 1, 3 pattern
+
+
+
 raw_cal_codes = codes_data[['board', 'cal_code']]
-raw_cal_codes.to_csv(file_name+'_cal_codes.txt', sep='\t', index=None, header=None)
+raw_cal_codes.to_csv(sub_file_dir+'/'+file_name+'_cal_codes.txt', sep='\t', index=None, header=None)
 print("Save raw cal codes to txt")
 
 selected_data = codes_data.loc[codes_data['flag'] >= 1]
@@ -59,7 +83,7 @@ print(selected_data)
 print("Transform raw codes to time (ns): Done")
 
 #  Save the selected events to txt file
-selected_data.to_csv(file_name+'.txt', sep='\t', index=None, header=None)
+selected_data.to_csv(sub_file_dir+'/'+file_name+'.txt', sep='\t', index=None, header=None)
 print("Save the selected_data to txt")
 
 #a[a.loc[codes_data['board']==3]['toa']]
