@@ -95,9 +95,12 @@ def main():
     # Make lists for cuts
     # toa_code lower, toa_code upper, tot_code lower, tot_code upper, cal_code lower
     # and cal_code upper limits
-    b0_cuts = [150, 300, 40, 70, 120, 140]
-    b1_cuts = [150, 300, 50, 80, 120, 140]
-    b3_cuts = [150, 300, 60, 80, 120, 140]
+    b0v, _ = np.histogram(b0_data['tot_code'], bins=300, range=(0,300))
+    b1v, _ = np.histogram(b1_data['tot_code'], bins=300, range=(0,300))
+    b3v, _ = np.histogram(b3_data['tot_code'], bins=300, range=(0,300))
+    b0_cuts = [100, 250, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
+    b1_cuts = [100, 250, np.argmax(b1v)-22, np.argmax(b1v)+22,120, 140]
+    b3_cuts = [100, 250, np.argmax(b3v)-22, np.argmax(b3v)+22,120, 140]
     pd.options.mode.chained_assignment = None
 
     b0v, _ = np.histogram(b0_data['tot'], bins=200, range=(0,20))
