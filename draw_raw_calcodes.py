@@ -44,8 +44,9 @@ def main():
     plot_dir = dir_path + '/' + file_name + '_plot'
     sub_file_dir = dir_path + '/' + file_name + '_sub_file'
 
-    read_data = pd.read_csv(sub_file_dir+'/'+file_name+'_cal_codes.txt', delimiter = '\s+', header=None)
-    read_data.columns = ['board', 'cal_code']
+    read_data = pd.read_csv(dir_path + '/' + file_name + '.txt', delimiter = '\s+', header=None, skiprows=1)
+    read_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'dummy1', 'dummy2']
+    read_data = read_data.drop(['toa_code', 'tot_code', 'flag', 'dummy1', 'dummy2'], axis=1)
     print("Read data: Done")
 
     for board_number in [0, 1, 3]:
