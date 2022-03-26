@@ -37,7 +37,7 @@ def drawPlots(board_number, read_data, plot_dir):
     ax[0,0].axis('off')
     hist1d(ax[0,1], read_data, board_number, 'toa_code', 800, (0,800), '', 'TOA code', 'Number of events')
     hist1d(ax[0,2], read_data, board_number, 'tot_code', 300, (0,300), '', 'TOT code', '')
-    hist2d(ax[0,3], read_data, board_number, 'tot_code', 'toa_code', 200, [[0,300],[0,300]], '', 'ToT code', 'ToA code')
+    hist2d(ax[0,3], read_data, board_number, 'tot_code', 'toa_code', 200, [[0,300],[0,800]], '', 'ToT code', 'ToA code')
 
     hist1d(ax[1,0], read_data, board_number, 'cal_code', 1000, (0,1000), '', 'CAL code', 'Number of events', logy=True)
     hist1d(ax[1,1], read_data, board_number, 'toa', 125, (0,12.5), '', 'TOA (ns)', '')
