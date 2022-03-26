@@ -7,6 +7,7 @@
 *.docx
 *.pdf
 *.xlsx
+*.png
 
 # Personal test codes. pjgwak
 personal_show_codes_distributions.py
