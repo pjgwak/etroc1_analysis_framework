@@ -43,7 +43,7 @@ def drawPlots(board_number, read_data, plot_dir):
     hist1d(ax[1,1], read_data, board_number, 'toa', 125, (0,12.5), '', 'TOA (ns)', '')
     hist1d(ax[1,2], read_data, board_number, 'tot', 200, (0,20), '', 'TOT (ns)', '')
     hist2d(ax[1,3], read_data, board_number, 'tot', 'toa', [200,125], [[0,20],[0,12.5]], '', 'ToT (ns)', 'ToA (ns)')
-
+    
     plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawData.png')
     if options.PDF:
         outfile = plot_dir + '/board'+ str(board_number) + '_rawData.pdf'
