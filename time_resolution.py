@@ -22,7 +22,7 @@ def gaussianFit(delta_toa, board_number, plot_dir, twc=False):
     fig, ax = plt.subplots(constrained_layout=True, figsize=(800*px, 600*px))
     fit_y = gauss(centers, *par)
     ax.plot(centers, bins, 'o', label='data')
-    ax.plot(centers, fit_y, '-', label='fit: mean=%.3f, sigma=%.3f' % (par[1], par[2]))
+    ax.plot(centers, fit_y, '-', label='fit: mean=%.3f, sigma=%.3f' % (par[1], abs(par[2])))
     ax.set_xlabel('ToA (ns)')
     ax.set_ylabel('Counts')
     ax.set_xlim(par[1]-0.5, par[1]+0.5)
@@ -53,20 +53,19 @@ def main():
     print("Read data: Done")
 
     #1. Gaus delta
-    #b0
-    #(b1corr_toa+b3_cprr_ta)/2 - b0_corr_toa -> delta_toa for gauss fitting
-    b0_corr['delta_toa_gauss'] = (b1_corr['corr_toa'] + b3_corr['corr_toa'])*0.5 - b0_corr['corr_toa']
-    b1_corr['delta_toa_gauss'] = (b0_corr['corr_toa'] + b3_corr['corr_toa'])*0.5 - b1_corr['corr_toa']
-    b3_corr['delta_toa_gauss'] = (b0_corr['corr_toa'] + b1_corr['corr_toa'])*0.5 - b3_corr['corr_toa']
+    b0_corr['delta_toa_gauss'] = b1_corr['corr_toa'] - b3_corr['corr_toa']
+    b1_corr['delta_toa_gauss'] = b0_corr['corr_toa'] - b3_corr['corr_toa']
+    b3_corr['delta_toa_gauss'] = b0_corr['corr_toa'] - b1_corr['corr_toa']
 
     #### Get Delta TOA of each board w/o TWC ####
-    par0 = gaussianFit((b1_corr['toa'] + b3_corr['toa'])*0.5 - b0_corr['toa'], 0, plot_dir)
-    par1 = gaussianFit((b0_corr['toa'] + b3_corr['toa'])*0.5 - b1_corr['toa'], 1, plot_dir)
-    par3 = gaussianFit((b0_corr['toa'] + b1_corr['toa'])*0.5 - b3_corr['toa'], 3, plot_dir)
+    # [0]: Norm, [1]: Mean,  [2]: Sigma
+    par0 = gaussianFit(b1_corr['toa'] - b3_corr['toa'], 0, plot_dir)
+    par1 = gaussianFit(b0_corr['toa'] - b3_corr['toa'], 1, plot_dir)
+    par3 = gaussianFit(b0_corr['toa'] - b1_corr['toa'], 3, plot_dir)
     print('========== \u0394 ToA w/o TWC ==========')
-    print('b0: %.4f'%(par0[2]))
-    print('b1: %.4f'%(par1[2]))
-    print('b3: %.4f'%(par3[2]), '\n')
+    print('b0: %.4f'%(abs(par0[2])))
+    print('b1: %.4f'%(abs(par1[2])))
+    print('b3: %.4f'%(abs(par3[2])), '\n')
 
     #### Get Delta TOA of each board w/ TWC ####
     # [0]: Norm, [1]: Mean,  [2]: Sigma
@@ -74,9 +73,9 @@ def main():
     par1 = gaussianFit(b1_corr['delta_toa_gauss'], 1, plot_dir, True)
     par3 = gaussianFit(b3_corr['delta_toa_gauss'], 3, plot_dir, True)
     print('========== \u0394 ToA w/ TWC ==========')
-    print('b0: %.4f'%(par0[2]))
-    print('b1: %.4f'%(par1[2]))
-    print('b3: %.4f'%(par3[2]), '\n')
+    print('b0: %.4f'%(abs(par0[2])))
+    print('b1: %.4f'%(abs(par1[2])))
+    print('b3: %.4f'%(abs(par3[2])), '\n')
 
     # Get time resoultions
     # Ex) b0 time resolution

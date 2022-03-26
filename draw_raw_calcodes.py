@@ -6,6 +6,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option('--pdf', action='store_true', default=False, dest='PDF')
+parser.add_option('--argmax', action='store_true', default=False, dest='ARGMAX')
 (options, args) = parser.parse_args()
 
 def hist1d(ax, input_data, board_number, variable='toa_code', num_bins=100, range_hist=(0,100), title='', xtitle='', ytitle='', logy=False):
@@ -30,6 +31,11 @@ def drawPlots(board_number, read_data, plot_dir):
         outfile = plot_dir + '/board'+ str(board_number) + '_rawCALcode.pdf'
         plt.savefig(outfile)
 
+def printArgMax(board_number, input_data):
+    data = input_data.loc[input_data['board'] == board_number]
+    bins, _ = np.histogram(data['cal_code'], bins=1000, range=(0,1000))
+    print('Board '+str(board_number)+' : '+str(np.argmax(bins)))
+
 def main():
     with open('config.yaml') as f:
         conf = yaml.load(f, Loader=yaml.FullLoader)
@@ -44,6 +50,8 @@ def main():
 
     for board_number in [0, 1, 3]:
         drawPlots(board_number, read_data, plot_dir)
+        if options.ARGMAX:
+            printArgMax(board_number, read_data)
 
 
 if __name__ == '__main__':

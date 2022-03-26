@@ -18,7 +18,7 @@ from matplotlib.colors import LogNorm
 import matplotlib.pyplot as plt
 from optparse import OptionParser
 parser = OptionParser()
-parser.add_option('-p', '--print', help='Print dataset during execution', action='store_true', default=True, dest='PRINT')
+parser.add_option('-p', '--print', help='Print dataset during execution', action='store_true', default=False, dest='PRINT')
 (options, args) = parser.parse_args()
 
 with open('config.yaml') as f:
@@ -75,7 +75,7 @@ if options.PRINT:
     print('============ Print selected good events (Board Id 0 1 3 aligned) in dataset ============')
     print(selected_data.head, '\n')
 
-fbin = 3.125 / 170.
+fbin = 3.125 / 130.
 selected_data.drop(['flag'], axis=1, inplace = True)
 selected_data['toa'] = 12.5 - selected_data['toa_code'] * fbin
 selected_data['tot'] = (selected_data['tot_code'] * 2 - np.floor(selected_data['tot_code'] / 32.)) * fbin
