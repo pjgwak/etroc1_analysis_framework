@@ -23,24 +23,22 @@ parser.add_option('-p', '--print', help='Print dataset during execution', action
 
 with open('config.yaml') as f:
     conf = yaml.load(f, Loader=yaml.FullLoader)
-
 dir_path = conf['dir_path']
 file_name = conf['file_name']
-
 plot_dir = dir_path + '/' + file_name + '_plot'
 sub_file_dir = dir_path + '/' + file_name + '_sub_file'
 
-try:
-    if not os.path.exists(plot_dir):
-        os.makedirs(plot_dir)
-except OSError:
-    print('Error: Cannot creat plot directory')
-
-try:
-    if not os.path.exists(sub_file_dir):
-        os.makedirs(sub_file_dir)
-except OSError:
-    print('Error: Cannot creat sub file directory')
+#try:
+#    if not os.path.exists(plot_dir):
+#        os.makedirs(plot_dir)
+#except OSError:
+#    print('Error: Cannot creat plot directory')
+#
+#try:
+#    if not os.path.exists(sub_file_dir):
+#        os.makedirs(sub_file_dir)
+#except OSError:
+#    print('Error: Cannot creat sub file directory')
 
 codes_data = pd.read_csv(dir_path + '/' + file_name + '.txt', delimiter = '\s+', header=None, skiprows=1)
 codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'dummy1', 'dummy2']

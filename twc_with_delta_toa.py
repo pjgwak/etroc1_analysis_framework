@@ -40,7 +40,10 @@ def plotFit(ax, data, v1, v2, popt, title, xtitle, ytitle):
     if ax is not None:
         plt.sca(ax)
     ax.plot(data[v1].values, quad_func(data[v1].values, *popt), 'g--', label='fit: a=%.3f, b=%.3f, c=%.3f' % tuple(popt))
-    plt.hist2d(data[v1], data[v2], bins=[100,100], cmap=plt.cm.jet, cmin=1)
+    # Make bin width 0.05 ns
+    v1_bins = int((data[v1].max()-data[v1].min())/0.05)
+    v2_bins = int((data[v2].max()-data[v2].min())/0.05)
+    plt.hist2d(data[v1], data[v2], bins=[v1_bins,v2_bins], cmap=plt.cm.jet, cmin=1)
     ax.set_title(title)
     ax.set_xlabel(xtitle, fontsize=13)
     ax.set_ylabel(ytitle, fontsize=13)
