@@ -40,10 +40,7 @@ def plotFit(ax, data, v1, v2, popt, title, xtitle, ytitle):
     if ax is not None:
         plt.sca(ax)
     ax.plot(data[v1].values, quad_func(data[v1].values, *popt), 'g--', label='fit: a=%.3f, b=%.3f, c=%.3f' % tuple(popt))
-    # Make bin width 0.05 ns
-    v1_bins = int((data[v1].max()-data[v1].min())/0.05)
-    v2_bins = int((data[v2].max()-data[v2].min())/0.05)
-    plt.hist2d(data[v1], data[v2], bins=[v1_bins,v2_bins], cmap=plt.cm.jet, cmin=1)
+    plt.hist2d(data[v1], data[v2], bins=[100,100], cmap=plt.cm.jet, cmin=1)
     ax.set_title(title)
     ax.set_xlabel(xtitle, fontsize=13)
     ax.set_ylabel(ytitle, fontsize=13)
@@ -98,14 +95,19 @@ def main():
     # Make lists for cuts
     # toa_code lower, toa_code upper, tot_code lower, tot_code upper, cal_code lower
     # and cal_code upper limits
-    b0_cuts = [100, 250, 30, 75, 120, 140]
-    b1_cuts = [100, 250, 45, 85, 120, 140]
-    b3_cuts = [100, 250, 50, 90, 120, 140]
+    b0v, _ = np.histogram(b0_data['tot_code'], bins=300, range=(0,300))
+    b1v, _ = np.histogram(b1_data['tot_code'], bins=300, range=(0,300))
+    b3v, _ = np.histogram(b3_data['tot_code'], bins=300, range=(0,300))
+    #print(np.argmax(b0v), np.argmax(b1v), np.argmax(b3v))
+    b0_cuts = [100, 250, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
+    b1_cuts = [100, 250, np.argmax(b1v)-22, np.argmax(b1v)+22,120, 140]
+    b3_cuts = [100, 250, np.argmax(b3v)-22, np.argmax(b3v)+22,120, 140]
     pd.options.mode.chained_assignment = None
 
     b0v, _ = np.histogram(b0_data['tot'], bins=200, range=(0,20))
     b1v, _ = np.histogram(b1_data['tot'], bins=200, range=(0,20))
     b3v, _ = np.histogram(b3_data['tot'], bins=200, range=(0,20))
+    #print(np.argmax(b0v)*0.1, np.argmax(b1v)*0.1, np.argmax(b3v)*0.1)
     b0_tcuts = [7, 10, np.argmax(b0v)*0.1-1.5, np.argmax(b0v)*0.1+1.5, 120, 140]
     b1_tcuts = [7, 10, np.argmax(b1v)*0.1-1.5, np.argmax(b1v)*0.1+1.5, 120, 140]
     b3_tcuts = [7, 10, np.argmax(b3v)*0.1-1.5, np.argmax(b3v)*0.1+1.5, 120, 140]
