@@ -1,10 +1,6 @@
 # ignore mac's folder info file (DS_Store)
 *.DS_Store
 
-
-config.yaml
-
-
 # txt files: Be careful not to upload experiments datasets
 *.txt
 *.csv
