@@ -98,6 +98,7 @@ def main():
     b0v, _ = np.histogram(b0_data['tot_code'], bins=300, range=(0,300))
     b1v, _ = np.histogram(b1_data['tot_code'], bins=300, range=(0,300))
     b3v, _ = np.histogram(b3_data['tot_code'], bins=300, range=(0,300))
+    #print(np.argmax(b0v), np.argmax(b1v), np.argmax(b3v))
     b0_cuts = [100, 250, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
     b1_cuts = [100, 250, np.argmax(b1v)-22, np.argmax(b1v)+22,120, 140]
     b3_cuts = [100, 250, np.argmax(b3v)-22, np.argmax(b3v)+22,120, 140]
@@ -106,6 +107,7 @@ def main():
     b0v, _ = np.histogram(b0_data['tot'], bins=200, range=(0,20))
     b1v, _ = np.histogram(b1_data['tot'], bins=200, range=(0,20))
     b3v, _ = np.histogram(b3_data['tot'], bins=200, range=(0,20))
+    #print(np.argmax(b0v)*0.1, np.argmax(b1v)*0.1, np.argmax(b3v)*0.1)
     b0_tcuts = [7, 10, np.argmax(b0v)*0.1-1.5, np.argmax(b0v)*0.1+1.5, 120, 140]
     b1_tcuts = [7, 10, np.argmax(b1v)*0.1-1.5, np.argmax(b1v)*0.1+1.5, 120, 140]
     b3_tcuts = [7, 10, np.argmax(b3v)*0.1-1.5, np.argmax(b3v)*0.1+1.5, 120, 140]
