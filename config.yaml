@@ -3,6 +3,26 @@
 #file_name: F9P5_F11P5_F5P9_Beam_0324 # w/o .txt
 
 # Mar. 24th
-dir_path: 2022-03-24_Array_Test_Results_8PM
-file_name: F9P5_F11P5_F5P9_Beam_0324_8PM # w/o .txt
+#dir_path: 2022-03-24_Array_Test_Results_8PM
+#file_name: F9P5_F11P5_F5P9_Beam_0324_8PM # w/o .txt
 
+# Mar. 25th
+#dir_path: 2022-03-25_Array_Test_Results
+#file_name: F9P5_F11P5_F5P9_Beam_0325
+
+# Mar. 26th
+# TDC test 1
+#dir_path: 2022-03-26_Array_Test_Results
+#file_name: F9P5_F11P5_F5P9_Beam_8pm_autoReset1_0326
+
+# TDC test 2
+#dir_path: 2022-03-26_Array_Test_Results
+#file_name: F9P5_F11P5_F5P9_Beam_8pm_set_TDC_level_0326
+
+# Default setting
+#dir_path: 2022-03-26_Array_Test_Results
+#file_name: F9P5_F11P5_F5P9_Beam_0326_8PM
+
+# Mar. 27th
+dir_path: 2022-03-27_Array_Test_Results
+file_name: F9P5_F11P5_F5P9_Beam_0327
