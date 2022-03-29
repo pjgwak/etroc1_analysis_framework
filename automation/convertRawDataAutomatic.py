@@ -1,0 +1,55 @@
+from glob import glob
+import time
+from optparse import OptionParser
+import os
+import shutil
+import time
+import subprocess
+
+#####################
+### Configure options
+parser = OptionParser()
+parser.add_option('-d', '--directory', help='directory', dest='directory')
+parser.add_option('-n', '--name', default='TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P9_QSel0_DAC595', help='name', dest='NAME')
+(options, args) = parser.parse_args()
+#####################
+#####################
+
+cwd = os.getcwd()
+count = 0
+finishedDirs = []
+
+while True:
+    print('Base directory is %s'%(cwd))
+    ListDirs = [x for x in glob(options.directory+'/*[!.txt]')]
+    setListDirs = set(ListDirs)
+    setDoneDirs = set(finishedDirs)
+    dirs_to_process = setListDirs - setDoneDirs
+    for idir in dirs_to_process:
+
+        ### Copy converting script into the directory
+        shutil.copy('Data_Analyze1.0.flex.timestemp.py', idir+'/')
+
+        ListFiles = [f for f in os.listdir(idir)]
+        #print(ListFiles[0], ListFiles[-1])
+        minIdx, maxIdx = ListFiles[0].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
+        print(minIdx, maxIdx)
+
+        #### Move to the directory where the actual code will run
+        os.chdir(idir)
+        print('I am here! %s'%(os.getcwd()))
+
+        cmd = 'python3 Data_Analyze1.0.flex.timestemp.py %s %s %s > ../F9P5_F11P5_F5P9_Beam_%i.txt'%(minIdx, maxIdx, options.NAME, count)
+        print(cmd)
+        tic = time.time()
+        os.system(cmd)
+        dt = dt = time.time() - tic
+        print('total time: ',dt/60)
+        finishedDirs.append(idir)
+
+        #### Back to base dir
+        os.chdir(cwd)
+        count += 1
+
+    #break
+    time.sleep(1800) ### 30 mins sleep
