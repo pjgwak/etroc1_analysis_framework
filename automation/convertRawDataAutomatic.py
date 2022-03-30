@@ -22,11 +22,12 @@ finishedDirs = []
 
 while True:
     print('Base directory is %s'%(cwd))
-    ListDirs = [x.split('/')[-1].split('_')[-1] for x in glob(options.directory+'/*_[!.txt]')]
+    ListDirs = [x.split('/')[-1].split('_')[-1] for x in glob(options.directory+'/*_*[!.txt]')]
+    print(ListDirs)
     setListDirs = set(map(int, ListDirs))
     setDoneDirs = set(map(int, finishedDirs))
     dirs_to_process = setListDirs - setDoneDirs
-    print(dirs_to_process)
+    print(dirs_to_process, '\n')
     for idir in dirs_to_process:
 
         targetDir = '%s/dataset_%d'%(options.directory, idir)
@@ -42,7 +43,7 @@ while True:
             minIdx, maxIdx = ListFiles[1].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
         else:
             minIdx, maxIdx = ListFiles[0].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
-        print(minIdx, maxIdx)
+        print('Min:', minIdx, 'Max:', maxIdx)
 
         #### Move to the directory where the actual code will run
         os.chdir(targetDir)
@@ -51,9 +52,9 @@ while True:
         cmd = 'python3 Data_Analyze1.0.flex.timestemp.py %s %s %s > ../F9P5_F11P5_F5P5_Beam_%i.txt'%(minIdx, maxIdx, options.NAME, count)
         print(cmd)
         tic = time.time()
-        #os.system(cmd)
+        os.system(cmd)
         dt = dt = time.time() - tic
-        print('total time: ',dt/60)
+        print('total time: ',dt/60, '\n')
         finishedDirs.append(idir)
 
         #### Back to base dir
@@ -61,4 +62,4 @@ while True:
         count += 1
 
     #break
-    time.sleep(1200) ### 20 mins sleep
+    time.sleep(600) ### 10 mins sleep
