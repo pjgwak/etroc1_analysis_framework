@@ -3,8 +3,7 @@ import time
 from optparse import OptionParser
 import os
 import shutil
-import time
-import subprocess
+from natsort import natsorted
 
 #####################
 ### Configure options
@@ -23,7 +22,7 @@ finishedDirs = []
 
 while True:
     print('Base directory is %s'%(cwd))
-    ListDirs = [x.split('/')[-1].split('_')[-1] for x in glob(options.directory+'/*[!.txt]')]
+    ListDirs = [x.split('/')[-1].split('_')[-1] for x in glob(options.directory+'/*_[!.txt]')]
     setListDirs = set(map(int, ListDirs))
     setDoneDirs = set(map(int, finishedDirs))
     dirs_to_process = setListDirs - setDoneDirs
@@ -33,11 +32,12 @@ while True:
         targetDir = '%s/dataset_%d'%(options.directory, idir)
 
         ### Copy converting script into the directory
-        shutil.copy('Data_Analyze1.0.flex.timestemp.py', idir+'/')
+        shutil.copy('Data_Analyze1.0.flex.timestemp.py', targetDir+'/')
         #print('Copy Data_Analyze1.0.flex.timestemp.py %s/' %(targetDir))
 
         ListFiles = [f for f in os.listdir(targetDir)]
-        #print(ListFiles[0], ListFiles[1], ListFiles[-1])
+        ListFiles = natsorted(ListFiles, key=lambda y: y.lower())
+        #print(ListFiles[1], ListFiles[-1])
         if '.py' in ListFiles[0]:
             minIdx, maxIdx = ListFiles[1].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
         else:
@@ -51,7 +51,7 @@ while True:
         cmd = 'python3 Data_Analyze1.0.flex.timestemp.py %s %s %s > ../F9P5_F11P5_F5P5_Beam_%i.txt'%(minIdx, maxIdx, options.NAME, count)
         print(cmd)
         tic = time.time()
-        os.system(cmd)
+        #os.system(cmd)
         dt = dt = time.time() - tic
         print('total time: ',dt/60)
         finishedDirs.append(idir)
