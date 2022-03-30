@@ -27,7 +27,7 @@ def drawPlots(board_number, read_data, plot_dir):
     fig, ax = plt.subplots(constrained_layout=True, figsize=(800*px, 450*px))
     hist1d(ax, read_data, board_number, 'cal_code', 1000, (0,1000), 'Board '+str(board_number), 'CAL code', 'Number of hits', logy=True)
 
-    plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawCALcode.png')
+    plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawCALcode.pdf')
     if options.PDF:
         outfile = plot_dir + '/board'+ str(board_number) + '_rawCALcode.pdf'
         plt.savefig(outfile)
@@ -36,6 +36,8 @@ def printArgMax(board_number, input_data):
     data = input_data.loc[input_data['board'] == board_number]
     bins, _ = np.histogram(data['cal_code'], bins=1000, range=(0,1000))
     print('Board '+str(board_number)+' : '+str(np.argmax(bins)))
+    #h = np.histogram(data['cal_code'], bins=1000, range=(0,1000))
+    #print('Board '+str(board_number)+' : '+str(np.max(h[0])))
 
 def main():
     with open('config.yaml') as f:

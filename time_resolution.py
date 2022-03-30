@@ -13,8 +13,9 @@ def gaussianFit(delta_toa, board_number, plot_dir, twc=False):
 
     def gauss(x, a, x0, sigma):
         return a * np.exp(-(x - x0) ** 2 / (2 * sigma ** 2))
-
-    bins, edges = np.histogram(delta_toa.values, 100, density=False)
+    # Make bin width 0.02 ns
+    my_bins = int((delta_toa.max()-delta_toa.min())/0.02)
+    bins, edges = np.histogram(delta_toa.values, my_bins, density=False)
     centers = edges[:-1] + np.diff(edges) / 2
     par, _ = opt.curve_fit(gauss, centers, bins)
 
@@ -29,10 +30,10 @@ def gaussianFit(delta_toa, board_number, plot_dir, twc=False):
     ax.legend()
     if twc:
         ax.set_title('Board ' + str(board_number) + r': $\Delta$ ToA w/ TWC')
-        fig.savefig(plot_dir+'/gaussianFit_Board_wTWC'+str(board_number)+'.png')
+        fig.savefig(plot_dir+'/gaussianFit_Board_wTWC'+str(board_number)+'.pdf')
     else:
         ax.set_title('Board ' + str(board_number) + r': $\Delta$ ToA w/o TWC')
-        fig.savefig(plot_dir+'/gaussianFit_Board_noTWC'+str(board_number)+'.png')
+        fig.savefig(plot_dir+'/gaussianFit_Board_noTWC'+str(board_number)+'.pdf')
 
     return par
 

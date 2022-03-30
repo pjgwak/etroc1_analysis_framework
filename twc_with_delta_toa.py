@@ -70,7 +70,7 @@ def draw_board(board_number, input_data, popt, corr_popt, plot_dir):
     elif options.TIME:
         extraArg = 'byTime'
 
-    plt.savefig(plot_dir + '/board'+str(board_number)+'_'+extraArg+ '_TimeWalkCorrection.png')
+    plt.savefig(plot_dir + '/board'+str(board_number)+'_'+extraArg+ '_TimeWalkCorrection.pdf')
     if options.PDF:
         outfile = plot_dir + '/board'+str(board_number)+'_'+extraArg+ '_TimeWalkCorrection.pdf'
         plt.savefig(outfile)
