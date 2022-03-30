@@ -10,7 +10,7 @@ import subprocess
 ### Configure options
 parser = OptionParser()
 parser.add_option('-d', '--directory', help='directory', dest='directory')
-parser.add_option('-n', '--name', default='TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P9_QSel0_DAC595', help='name', dest='NAME')
+parser.add_option('-n', '--name', default='TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P5_QSel0_DAC560', help='name', dest='NAME')
 (options, args) = parser.parse_args()
 #####################
 #####################
@@ -19,27 +19,36 @@ cwd = os.getcwd()
 count = 0
 finishedDirs = []
 
+#2022-03-29_Array_Test_Results_F9P5_F11P5_F5P5/dataset_46
+
 while True:
     print('Base directory is %s'%(cwd))
-    ListDirs = [x for x in glob(options.directory+'/*[!.txt]')]
-    setListDirs = set(ListDirs)
-    setDoneDirs = set(finishedDirs)
+    ListDirs = [x.split('/')[-1].split('_')[-1] for x in glob(options.directory+'/*[!.txt]')]
+    setListDirs = set(map(int, ListDirs))
+    setDoneDirs = set(map(int, finishedDirs))
     dirs_to_process = setListDirs - setDoneDirs
+    print(dirs_to_process)
     for idir in dirs_to_process:
+
+        targetDir = '%s/dataset_%d'%(options.directory, idir)
 
         ### Copy converting script into the directory
         shutil.copy('Data_Analyze1.0.flex.timestemp.py', idir+'/')
+        #print('Copy Data_Analyze1.0.flex.timestemp.py %s/' %(targetDir))
 
-        ListFiles = [f for f in os.listdir(idir)]
-        #print(ListFiles[0], ListFiles[-1])
-        minIdx, maxIdx = ListFiles[0].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
+        ListFiles = [f for f in os.listdir(targetDir)]
+        #print(ListFiles[0], ListFiles[1], ListFiles[-1])
+        if '.py' in ListFiles[0]:
+            minIdx, maxIdx = ListFiles[1].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
+        else:
+            minIdx, maxIdx = ListFiles[0].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
         print(minIdx, maxIdx)
 
         #### Move to the directory where the actual code will run
-        os.chdir(idir)
+        os.chdir(targetDir)
         print('I am here! %s'%(os.getcwd()))
 
-        cmd = 'python3 Data_Analyze1.0.flex.timestemp.py %s %s %s > ../F9P5_F11P5_F5P9_Beam_%i.txt'%(minIdx, maxIdx, options.NAME, count)
+        cmd = 'python3 Data_Analyze1.0.flex.timestemp.py %s %s %s > ../F9P5_F11P5_F5P5_Beam_%i.txt'%(minIdx, maxIdx, options.NAME, count)
         print(cmd)
         tic = time.time()
         os.system(cmd)
@@ -52,4 +61,4 @@ while True:
         count += 1
 
     #break
-    time.sleep(1800) ### 30 mins sleep
+    time.sleep(1200) ### 20 mins sleep
