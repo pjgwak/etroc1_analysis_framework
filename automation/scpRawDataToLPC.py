@@ -25,11 +25,11 @@ while True:
 
     files_to_process = SetRawFiles - copiedRawFiles
 
-    dname = 'dataset%d'%(count)
-    destination = '/uscms_data/d1/'+options.USER+'/ETROC/2022-03-28_Array_Test_Results/'+dname
+    dname = 'dataset_%d'%(count)
+    destination = '/uscms_data/d1/'+options.USER+'/ETROC/2022-03-29_Array_Test_Results/'+dname
     for run in files_to_process:
         fname = 'TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P9_QSel0_DAC595_%i.dat' % run
-        cmd = 'scp %s/%s %s@cmslpc-sl7.fnal.gov:%s/%s' % (dname, fname, options.USER, destination, fname)
+        cmd = 'scp %s/%s %s@cmslpc-sl7.fnal.gov:%s/%s' % (options.directory, fname, options.USER, destination, fname)
         #print(cmd)
         os.system(cmd)
         ListcopiedRawFiles.append(run)
@@ -37,4 +37,4 @@ while True:
     count += 1
 
     #break
-    time.sleep(1800) ### 30 mins sleep
+    time.sleep(180) ### 3 mins sleep
