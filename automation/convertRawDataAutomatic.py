@@ -54,7 +54,7 @@ for idir in setListDirs:
             minIdx, maxIdx = ListFiles[1].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
         else:
             minIdx, maxIdx = ListFiles[0].split('.')[0].split('_')[-1], ListFiles[-1].split('.')[0].split('_')[-1]
-        print('Min:', minIdx, 'Max:', maxIdx)
+        print('Min:', minIdx, 'Max:', maxIdx, 'how many files will be processed?', int(maxIdx)-int(minIdx)+1)
 
         #### Move to the directory where the actual code will run
         os.chdir(targetDir)
