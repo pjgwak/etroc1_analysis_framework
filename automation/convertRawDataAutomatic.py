@@ -64,8 +64,13 @@ for idir in setListDirs:
         print(cmd)
         tic = time.time()
         os.system(cmd)
-        dt = dt = time.time() - tic
-        print('total time: %.3f mins \n' %(dt/60))
+        dt = time.time() - tic
+        print('Elapsed time: %.3f mins \n' %(dt/60))
 
     #### Back to base dir
     os.chdir(cwd)
+
+    print('=========== Sleep 30 seconds ===========')
+    print('If you want to stop, please press CTRL + C at this point')
+    print('Otherwise the process will be messed up')
+    time.sleep(30)
