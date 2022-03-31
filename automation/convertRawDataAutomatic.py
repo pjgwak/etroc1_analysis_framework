@@ -16,9 +16,13 @@ parser.add_option('-o', '--output', default='', help='output name', dest='OUTPUT
 #####################
 
 cwd = os.getcwd()
-finishedDirs = []
-
 #2022-03-29_Array_Test_Results_F9P5_F11P5_F5P5/dataset_46
+
+if not options.OUTPUT:
+    raise ValueError('Clarifiy the output name')
+
+if not options.directory:
+    raise ValueError('Specifiy the input directory')
 
 print('Base directory is %s'%(cwd))
 ListDirs = [x.split('/')[-1].split('_')[-1] for x in glob(options.directory+'/*_*[!.txt]')]
@@ -60,8 +64,13 @@ for idir in setListDirs:
         print(cmd)
         tic = time.time()
         os.system(cmd)
-        dt = dt = time.time() - tic
-        print('total time: %.3f mins \n' %(dt/60))
+        dt = time.time() - tic
+        print('Elapsed time: %.3f mins \n' %(dt/60))
 
     #### Back to base dir
     os.chdir(cwd)
+
+    print('=========== Sleep 30 seconds ===========')
+    print('If you want to stop, please press CTRL + C at this point')
+    print('Otherwise the process will be messed up')
+    time.sleep(30)

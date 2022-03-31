@@ -2,14 +2,16 @@ from glob import glob
 import time
 from optparse import OptionParser
 import os
+import shutil
 
 #####################
 ### Configure options
 parser = OptionParser()
 parser.add_option('-d', '--directory', help='directory', dest='directory')
 parser.add_option('-u', '--user', help='username', dest='USER')
-parser.add_option('-f', '--file', action='store_true', default=False, dest='FILE')
+parser.add_option('-r', '--restart', action='store_true', default=False, dest='RESTART')
 parser.add_option('-c', '--count', dest='COUNT')
+parser.add_option('-n', '--name', default='TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P5_QSel0_DAC560', help='name', dest='NAME')
 (options, args) = parser.parse_args()
 #####################
 #####################
@@ -18,10 +20,13 @@ ListcopiedRawFiles = []
 count = 0
 #savedir = '/home/daq/ETROC1/E1Array/1tbHDD/ETROC1/ETROC1_Array_Test_Software_20220228'
 
-if options.FILE:
-    cmd = 'ls -v %s | tail -n 1' % (options.directory)
+if not os.path.exists('temp'):
+    os.mkdir('temp')
+
+if options.RESTART:
+    cmd = 'ls -v temp/ | tail -n 1'
     var = os.popen(cmd).read()
-    num = var.split('.')[0].split('_')[-1]
+    num = int(var.split('.')[0].split('_')[-1])
     ListcopiedRawFiles = [n for n in range(num+1)]
 
 if options.COUNT:
@@ -41,16 +46,19 @@ while True:
 
     if len(files_to_process) == 0:
         print('No file to copy')
-        print('Sleep 2 minutes \n')
-        time.sleep(120)
+        print('Sleep 1 minutes \n')
+        time.sleep(60)
         continue
     else:
         for run in files_to_process:
-            fname = 'TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P9_QSel0_DAC595_%i.dat' % run
+            fname = '%s_%i.dat' % (options.NAME, run)
             cmd = 'scp %s/%s %s@cmslpc-sl7.fnal.gov:%s/%s' % (options.directory, fname, options.USER, destination, fname)
             #print(cmd)
             os.system(cmd)
             ListcopiedRawFiles.append(run)
+
+        #### Copy the last copied file
+        shutil.copy('%s/%s_%i.dat'%(options.directory, options.NAME, ListcopiedRawFiles[-1]), 'temp/')
 
     count += 1
 
