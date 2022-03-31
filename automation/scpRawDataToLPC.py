@@ -53,8 +53,8 @@ while True:
         for run in files_to_process:
             fname = '%s_%i.dat' % (options.NAME, run)
             cmd = 'scp %s/%s %s@cmslpc-sl7.fnal.gov:%s/%s' % (options.directory, fname, options.USER, destination, fname)
-            print(cmd)
-            #os.system(cmd)
+            #print(cmd)
+            os.system(cmd)
             ListcopiedRawFiles.append(run)
 
         #### Copy the last copied file
