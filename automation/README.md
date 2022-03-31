@@ -22,7 +22,7 @@ For example,
 
 
 To convert raw ascii data to readable data, the following command is needed:  
-`python3 convertRawDataAutomatic.py -d <input dir> -o <output name>`
+`python3 convertRawDataAutomatic.py -d <input dir> -o <output name>`  
 For example,  
 `python3 convertRawDataAutomatic.py -d 2022-03-30_Array_Test_Results_F9P5_F11P5_F5P5 -o F9P5_F11P5_F5P5_Beam`  
 Even if the job has been killed by an unknown reason, you can put the same command to rerun this script.  
@@ -31,6 +31,6 @@ Even if the job has been killed by an unknown reason, you can put the same comma
 
 
 At the end, you need to merge individual output file to one text file.  
-`python3 mergeTXT.py -d <input dir> -o <output name>`
+`python3 mergeTXT.py -d <input dir> -o <output name>`  
 For example,  
 `python3 mergeTXT.py -d 2022-03-29_Array_Test_Results_F9P5_F11P5_F5P5 -o F9P5_F11P5_F5P5_Beam`
