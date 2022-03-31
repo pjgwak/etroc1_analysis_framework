@@ -6,7 +6,7 @@
 First, you need to setup the python3 environment.  
 `source setup.sh`   
 
-To copy raw data to LPC,
+To copy raw data to LPC,  
 `python3 scpRawDataToLPC.py -d <input dir> -u <username> -n <filename>`  
 For example,   
 `python3 scpRawDataToLPC.py -d test1 -u jongho -n TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P9_QSel0_DAC595`  
@@ -21,10 +21,10 @@ For example,
 
 
 
-To convert raw ascii data to readable data, the following command is needed:
+To convert raw ascii data to readable data, the following command is needed:  
 `python3 convertRawDataAutomatic.py -d <input dir> -o <output name>`
 For example,  
-`python3 convertRawDataAutomatic.py -d 2022-03-30_Array_Test_Results_F9P5_F11P5_F5P5 -o F9P5_F11P5_F5P5_Beam`
+`python3 convertRawDataAutomatic.py -d 2022-03-30_Array_Test_Results_F9P5_F11P5_F5P5 -o F9P5_F11P5_F5P5_Beam`  
 Even if the job has been killed by an unknown reason, you can put the same command to rerun this script.  
 
 
