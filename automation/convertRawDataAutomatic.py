@@ -16,9 +16,13 @@ parser.add_option('-o', '--output', default='', help='output name', dest='OUTPUT
 #####################
 
 cwd = os.getcwd()
-finishedDirs = []
-
 #2022-03-29_Array_Test_Results_F9P5_F11P5_F5P5/dataset_46
+
+if not options.OUTPUT:
+    raise ValueError('Clarifiy the output name')
+
+if not options.directory:
+    raise ValueError('Specifiy the input directory')
 
 print('Base directory is %s'%(cwd))
 ListDirs = [x.split('/')[-1].split('_')[-1] for x in glob(options.directory+'/*_*[!.txt]')]

@@ -7,9 +7,16 @@ from natsort import natsorted
 ### Configure options
 parser = OptionParser()
 parser.add_option('-d', '--directory', help='directory', dest='directory')
+parser.add_option('-o', '--output', default='', help='output name', dest='OUTPUT')
 (options, args) = parser.parse_args()
 #####################
 #####################
+
+if not options.OUTPUT:
+    raise ValueError('Clarifiy the output name')
+
+if not options.directory:
+    raise ValueError('Specifiy the input directory')
 
 cwd = os.getcwd()
 count = 0
@@ -36,6 +43,6 @@ print(newListFiles)
 
 argus = str(' '.join(newListFiles))
 
-cmd = 'cat %s > %s/F9P5_F11P5_F5P5_Beam.txt'%(argus, options.directory)
+cmd = 'cat %s > %s/%s.txt'%(argus, options.directory, options.OUTPUT)
 print(cmd)
 os.system(cmd)
