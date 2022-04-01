@@ -70,8 +70,8 @@ for idir in setListDirs:
     #### Back to base dir
     os.chdir(cwd)
 
-    print('=========== Sleep 30 seconds ===========')
+    print('=========== Sleep 15 seconds ===========')
     print('If you want to stop, please press CTRL + C at this point')
     print('Otherwise the process will be messed up')
     print('========================================\n\n')
-    time.sleep(30)
+    time.sleep(15)

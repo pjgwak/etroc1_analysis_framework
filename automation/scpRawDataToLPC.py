@@ -50,6 +50,9 @@ while True:
         time.sleep(60)
         continue
     else:
+        print('\n================================')
+        print('Which dataset?', dname)
+        print('================================')
         for run in files_to_process:
             fname = '%s_%i.dat' % (options.NAME, run)
             cmd = 'scp %s/%s %s@cmslpc-sl7.fnal.gov:%s/%s' % (options.directory, fname, options.USER, destination, fname)
@@ -63,4 +66,8 @@ while True:
     count += 1
 
     #break
+    print('=========== Sleep 3 minutes ============')
+    print('If you want to stop, please press CTRL + C at this point')
+    print('Otherwise the process will be messed up')
+    print('========================================\n\n')
     time.sleep(180) ### 3 mins sleep
