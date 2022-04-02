@@ -24,5 +24,31 @@
 #file_name: F9P5_F11P5_F5P9_Beam_0326_8PM
 
 # Mar. 27th
-dir_path: 2022-03-27_Array_Test_Results
-file_name: F9P5_F11P5_F5P9_Beam_0327
+#dir_path: 2022-03-27_Array_Test_Results
+#file_name: F9P5_F11P5_F5P9_Beam_0327
+
+# Mar. 28th
+# Beam was downed. No data
+
+# Mar. 29th
+# Change pixel of board F5 from P9 to P5
+#dir_path: 2022-03-29_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam
+
+# Default setting
+#dir_path: 2022-03-30_Array_Test_Results
+#file_name: F9P5_F11P5_F5P9_Beam_started_0329
+
+# P5 vs P9 comparing
+# 300 files for each data set
+# P9
+#dir_path: 2022-03-29_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam
+
+# P5
+#dir_path: 2022-03-29_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam
+
+# Mar. 31 - P5 for all boards one more time
+#dir_path: 2022-03-31_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam
