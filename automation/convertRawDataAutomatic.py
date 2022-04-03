@@ -40,8 +40,8 @@ for idir in setListDirs:
         targetDir = '%s/dataset_%d'%(options.directory, idir)
 
         ### Copy converting script into the directory
-        shutil.copy('Data_Analyze1.0.flex.timestemp.py', targetDir+'/')
-        #print('Copy Data_Analyze1.0.flex.timestemp.py %s/' %(targetDir))
+        shutil.copy('Data_Analyze1.1.flex.timestemp.py', targetDir+'/')
+        #print('Copy Data_Analyze1.1.flex.timestemp.py %s/' %(targetDir))
 
         ListFiles = [f for f in os.listdir(targetDir) if not "Split" in f]
 
@@ -60,7 +60,7 @@ for idir in setListDirs:
         os.chdir(targetDir)
         print('I am here! %s'%(os.getcwd()))
 
-        cmd = 'python3 Data_Analyze1.0.flex.timestemp.py %s %s %s > ../%s'%(minIdx, maxIdx, options.NAME, output)
+        cmd = 'python3 Data_Analyze1.1.flex.timestemp.py %s %s %s > ../%s'%(minIdx, maxIdx, options.NAME, output)
         print(cmd)
         tic = time.time()
         os.system(cmd)
@@ -70,8 +70,8 @@ for idir in setListDirs:
     #### Back to base dir
     os.chdir(cwd)
 
-    print('=========== Sleep 15 seconds ===========')
+    print('=========== Sleep 30 seconds ===========')
     print('If you want to stop, please press CTRL + C at this point')
     print('Otherwise the process will be messed up')
     print('========================================\n\n')
-    time.sleep(15)
+    time.sleep(30)
