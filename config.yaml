@@ -52,3 +52,15 @@
 # Mar. 31 - P5 for all boards one more time
 #dir_path: 2022-03-31_Array_Test_Results
 #file_name: F9P5_F11P5_F5P5_Beam
+
+# Apr. 01
+#dir_path: 2022-04-01_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam
+
+# Apr. 02
+#dir_path: 2022-04-02_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam
+
+# Apr. 03
+dir_path: 2022-04-03_Array_Test_Results
+file_name: F9P5_F11P5_F5P5_Beam

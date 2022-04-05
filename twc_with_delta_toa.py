@@ -102,9 +102,13 @@ def main():
     b1v, _ = np.histogram(b1_data['tot_code'], bins=300, range=(0,300))
     b3v, _ = np.histogram(b3_data['tot_code'], bins=300, range=(0,300))
     #print(np.argmax(b0v), np.argmax(b1v), np.argmax(b3v))
-    b0_cuts = [100, 250, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
-    b1_cuts = [100, 250, np.argmax(b1v)-22, np.argmax(b1v)+22,120, 140]
-    b3_cuts = [100, 250, np.argmax(b3v)-22, np.argmax(b3v)+22,120, 140]
+    # ToA 7 ns = 228, 8 ns = 187, 9 ns = 145, 10 ns = 104
+    # Onlt if Cal code is 130
+    b0_cuts = [145, 187, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
+    b1_cuts = [145, 187, np.argmax(b1v)-22, np.argmax(b1v)+22,120, 140]
+    b3_cuts = [145, 187, np.argmax(b3v)-22, np.argmax(b3v)+22,120, 140]
+
+    
     pd.options.mode.chained_assignment = None
 
     b0v, _ = np.histogram(b0_data['tot'], bins=200, range=(0,20))
