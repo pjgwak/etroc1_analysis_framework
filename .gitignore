@@ -9,6 +9,10 @@
 *.xlsx
 *.png
 
+# Now developing
+TOA_cut_study/
+
+
 # Personal test codes. pjgwak
 personal_show_codes_distributions.py
 pdf_png.py
