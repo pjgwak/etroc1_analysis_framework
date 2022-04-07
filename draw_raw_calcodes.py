@@ -8,6 +8,7 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option('--pdf', action='store_true', default=False, dest='PDF')
 parser.add_option('--argmax', action='store_true', default=False, dest='ARGMAX')
+parser.add_option('--zoom', help='range to zoom in', dest='ZOOM')
 (options, args) = parser.parse_args()
 
 def hist1d(ax, input_data, board_number, variable='toa_code', num_bins=100, range_hist=(0,100), title='', xtitle='', ytitle='', logy=False):
@@ -21,13 +22,16 @@ def hist1d(ax, input_data, board_number, variable='toa_code', num_bins=100, rang
     ax.legend(['Number of events: %d'%(data[variable].shape[0])])
     if logy:
         ax.set_yscale('log')
+    if options.ZOOM:
+        ax.set_xlim(int(options.ZOOM)-10, int(options.ZOOM)+10)
+        ax.set_xticks(np.arange(int(options.ZOOM)-10, int(options.ZOOM)+10, 1))
+        ax.grid(axis='x')
 
 def drawPlots(board_number, read_data, plot_dir):
-    px = 1/plt.rcParams['figure.dpi']  # pixel in inches
-    fig, ax = plt.subplots(constrained_layout=True, figsize=(800*px, 450*px))
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(12, 8))
     hist1d(ax, read_data, board_number, 'cal_code', 1000, (0,1000), 'Board '+str(board_number), 'CAL code', 'Number of hits', logy=True)
 
-    plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawCALcode.pdf')
+    plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawCALcode.png')
     if options.PDF:
         outfile = plot_dir + '/board'+ str(board_number) + '_rawCALcode.pdf'
         plt.savefig(outfile)
@@ -36,8 +40,6 @@ def printArgMax(board_number, input_data):
     data = input_data.loc[input_data['board'] == board_number]
     bins, _ = np.histogram(data['cal_code'], bins=1000, range=(0,1000))
     print('Board '+str(board_number)+' : '+str(np.argmax(bins)))
-    #h = np.histogram(data['cal_code'], bins=1000, range=(0,1000))
-    #print('Board '+str(board_number)+' : '+str(np.max(h[0])))
 
 def main():
     with open('config.yaml') as f:
@@ -51,7 +53,7 @@ def main():
             os.makedirs(plot_dir)
     except OSError:
         print('Error: Cannot creat plot directory')
-    
+
     try:
         if not os.path.exists(sub_file_dir):
             os.makedirs(sub_file_dir)
