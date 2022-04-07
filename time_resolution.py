@@ -6,7 +6,7 @@ import scipy
 from scipy import optimize as opt
 from optparse import OptionParser
 parser = OptionParser()
-parser.add_option('--plotting', action='store_true', dest='plotting')
+parser.add_option('--pdf', action='store_true', default=False, dest='PDF')
 (options, args) = parser.parse_args()
 
 def gaussianFit(delta_toa, board_number, plot_dir, twc=False):
@@ -19,8 +19,7 @@ def gaussianFit(delta_toa, board_number, plot_dir, twc=False):
     centers = edges[:-1] + np.diff(edges) / 2
     par, _ = opt.curve_fit(gauss, centers, bins)
 
-    px = 1/plt.rcParams['figure.dpi']  # pixel in inches
-    fig, ax = plt.subplots(constrained_layout=True, figsize=(800*px, 600*px))
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(8, 6))
     fit_y = gauss(centers, *par)
     ax.plot(centers, bins, 'o', label='data')
     ax.plot(centers, fit_y, '-', label='fit: mean=%.3f, sigma=%.3f' % (par[1], abs(par[2])))
@@ -30,10 +29,14 @@ def gaussianFit(delta_toa, board_number, plot_dir, twc=False):
     ax.legend()
     if twc:
         ax.set_title('Board ' + str(board_number) + r': $\Delta$ ToA w/ TWC')
-        fig.savefig(plot_dir+'/gaussianFit_Board_wTWC'+str(board_number)+'.pdf')
+        fig.savefig(plot_dir+'/gaussianFit_Board_wTWC'+str(board_number)+'.png')
+        if options.PDF:
+            fig.savefig(plot_dir+'/gaussianFit_Board_wTWC'+str(board_number)+'.pdf')
     else:
         ax.set_title('Board ' + str(board_number) + r': $\Delta$ ToA w/o TWC')
-        fig.savefig(plot_dir+'/gaussianFit_Board_noTWC'+str(board_number)+'.pdf')
+        fig.savefig(plot_dir+'/gaussianFit_Board_noTWC'+str(board_number)+'.png')
+        if options.PDF:
+            fig.savefig(plot_dir+'/gaussianFit_Board_noTWC'+str(board_number)+'.pdf')
 
     return par
 

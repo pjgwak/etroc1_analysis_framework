@@ -1,5 +1,6 @@
 import yaml
 import pandas as pd
+pd.options.mode.chained_assignment = None
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import optimize as opt
@@ -8,6 +9,7 @@ parser = OptionParser()
 parser.add_option('--pdf', action='store_true', default=False, dest='PDF')
 parser.add_option('--code', action='store_true', help='Select events by code cuts', default=False, dest='CODE')
 parser.add_option('--time', action='store_true', help='Select events by time cuts', default=False, dest='TIME')
+parser.add_option('-p', '--print', help='Print dataset during execution', action='store_true', default=False, dest='PRINT')
 (options, args) = parser.parse_args()
 
 if not any([options.CODE, options.TIME]):
@@ -15,6 +17,19 @@ if not any([options.CODE, options.TIME]):
 
 def quad_func(x, a, b, c):
     return a*x**2 + b*x + c
+
+def gaussianFit(delta_toa):
+
+    def gauss(x, a, x0, sigma):
+        return a * np.exp(-(x - x0) ** 2 / (2 * sigma ** 2))
+
+    #Make bin width 0.02 ns
+    my_bins = int((delta_toa.max()-delta_toa.min())/0.02)
+    bins, edges = np.histogram(delta_toa.values, my_bins, density=False)
+    centers = edges[:-1] + np.diff(edges) / 2
+    par, _ = opt.curve_fit(gauss, centers, bins)
+
+    return par
 
 def hist1d(ax, data, variable='toa', num_bins=125, range_hist=[0,12.5], title='', xtitle='', ytitle='', logy=False):
     if ax is not None:
@@ -51,9 +66,7 @@ def plotFit(ax, data, v1, v2, popt, title, xtitle, ytitle):
     ax.legend()
 
 def draw_board(board_number, input_data, popt, corr_popt, plot_dir):
-    bDraw = False
-    px = 1/plt.rcParams['figure.dpi']  # pixel in inches
-    fig, ax = plt.subplots(2,3, constrained_layout=True, figsize=(1200*px, 600*px))
+    fig, ax = plt.subplots(2,3, constrained_layout=True, figsize=(16, 9))
 
     ax[0,0].text(0.5, 0.5, "Board "+str(board_number)+"\nTime Walk Correction plots", fontsize=18, horizontalalignment='center', verticalalignment='center')
     ax[0,0].axis('off')
@@ -70,7 +83,7 @@ def draw_board(board_number, input_data, popt, corr_popt, plot_dir):
     elif options.TIME:
         extraArg = 'byTime'
 
-    plt.savefig(plot_dir + '/board'+str(board_number)+'_'+extraArg+ '_TimeWalkCorrection.pdf')
+    plt.savefig(plot_dir + '/board'+str(board_number)+'_'+extraArg+ '_TimeWalkCorrection.png')
     if options.PDF:
         outfile = plot_dir + '/board'+str(board_number)+'_'+extraArg+ '_TimeWalkCorrection.pdf'
         plt.savefig(outfile)
@@ -108,16 +121,17 @@ def main():
     b1_cuts = [150, 152, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 140]
     b3_cuts = [150, 152, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 140]
 
-    
-    pd.options.mode.chained_assignment = None
+
+    ####  ####
+    par0 = gaussianFit(b0_data['toa'] - b1_data['toa'])
+    par1 = gaussianFit(b0_data['toa'] - b3_data['toa'])
 
     b0v, _ = np.histogram(b0_data['tot'], bins=200, range=(0,20))
     b1v, _ = np.histogram(b1_data['tot'], bins=200, range=(0,20))
     b3v, _ = np.histogram(b3_data['tot'], bins=200, range=(0,20))
-    #print(np.argmax(b0v)*0.1, np.argmax(b1v)*0.1, np.argmax(b3v)*0.1)
-    b0_tcuts = [9, 10, np.argmax(b0v)*0.1-1.5, np.argmax(b0v)*0.1+1.02, 120, 140]
-    b1_tcuts = [9, 10, np.argmax(b1v)*0.1-1.5, np.argmax(b1v)*0.1+1.02, 120, 140]
-    b3_tcuts = [9, 10, np.argmax(b3v)*0.1-1.5, np.argmax(b3v)*0.1+1.02, 120, 140]
+    b0_tcuts = [7, 10, np.argmax(b0v)*0.1-1.02, np.argmax(b0v)*0.1+1.02, 120, 140]
+    b1_tcuts = [7-par0[1], 10-par0[1], np.argmax(b1v)*0.1-1.02, np.argmax(b1v)*0.1+1.02, 120, 140]
+    b3_tcuts = [7-par1[1], 10-par1[1], np.argmax(b3v)*0.1-1.02, np.argmax(b3v)*0.1+1.02, 120, 140]
 
     # Check toa, tot cut for events of each boards
     if options.CODE:
@@ -127,24 +141,30 @@ def main():
         b3_data['bCut'] = (b3_data['toa_code'] >= b3_cuts[0]) & (b3_data['toa_code'] <= b3_cuts[1]) & (b3_data['tot_code'] >= b3_cuts[2]) & (b3_data['tot_code'] <= b3_cuts[3]) & (b3_data['cal_code'] >= b3_cuts[4]) & (b3_data['cal_code'] <= b3_cuts[5])
     elif options.TIME:
         print('============= Select events with time cuts =============')
+        print('TOA cuts for the B0 board:', b0_tcuts[:2])
+        print('TOA cuts for the B1 board:', b1_tcuts[:2])
+        print('TOA cuts for the B3 board:', b3_tcuts[:2], '\n')
         b0_data['bCut'] = (b0_data['toa'] >= b0_tcuts[0]) & (b0_data['toa'] <= b0_tcuts[1]) & (b0_data['tot'] >= b0_tcuts[2]) & (b0_data['tot'] <= b0_tcuts[3]) & (b0_data['cal_code'] >= b0_tcuts[4]) & (b0_data['cal_code'] <= b0_tcuts[5])
         b1_data['bCut'] = (b1_data['toa'] >= b1_tcuts[0]) & (b1_data['toa'] <= b1_tcuts[1]) & (b1_data['tot'] >= b1_tcuts[2]) & (b1_data['tot'] <= b1_tcuts[3]) & (b1_data['cal_code'] >= b1_tcuts[4]) & (b1_data['cal_code'] <= b1_tcuts[5])
         b3_data['bCut'] = (b3_data['toa'] >= b3_tcuts[0]) & (b3_data['toa'] <= b3_tcuts[1]) & (b3_data['tot'] >= b3_tcuts[2]) & (b3_data['tot'] <= b3_tcuts[3]) & (b3_data['cal_code'] >= b3_tcuts[4]) & (b3_data['cal_code'] <= b3_tcuts[5])
-    print(b0_data.loc[b0_data['bCut'] == True])
-    print(b1_data.loc[b1_data['bCut'] == True])
-    print(b1_data.loc[b3_data['bCut'] == True])
+
+    if options.PRINT:
+        print(b0_data.loc[b0_data['bCut'] == True])
+        print(b1_data.loc[b1_data['bCut'] == True])
+        print(b1_data.loc[b3_data['bCut'] == True], '\n')
+
     # Find good twc events
     # Check event by event, all boards should pass their toa, tot cuts at the same time
     #b0_data['bDelta'] = b0_data['bCut']==True and b1_data['bCut']==True and b3_data['bCut']==True
     b0_data['bTwc'] = (b0_data['bCut']==True) & (b1_data['bCut']==True) & (b3_data['bCut']==True)
     b1_data['bTwc'] = (b0_data['bCut']==True) & (b1_data['bCut']==True) & (b3_data['bCut']==True)
     b3_data['bTwc'] = (b0_data['bCut']==True) & (b1_data['bCut']==True) & (b3_data['bCut']==True)
-    print(b0_data.loc[b0_data['bTwc'] == True])
-    print(b1_data.loc[b1_data['bTwc'] == True])
-    print(b3_data.loc[b3_data['bTwc'] == True])
-    #print(b3_data)
-    exit(1)
-    
+
+    if options.PRINT:
+        print(b0_data.loc[b0_data['bTwc'] == True])
+        print(b1_data.loc[b1_data['bTwc'] == True])
+        print(b3_data.loc[b3_data['bTwc'] == True], '\n')
+
     b0_twc_delta_data = b0_data.loc[b0_data['bTwc'] == True][['toa','tot']]
     b1_twc_delta_data = b1_data.loc[b1_data['bTwc'] == True][['toa','tot']]
     b3_twc_delta_data = b3_data.loc[b3_data['bTwc'] == True][['toa','tot']]
