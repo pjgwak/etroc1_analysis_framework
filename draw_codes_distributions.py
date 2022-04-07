@@ -17,8 +17,6 @@ def hist1d(ax, input_data, board_number, variable='toa_code', num_bins=100, rang
     ax.set_ylabel(ytitle, fontsize=13)
     ax.legend(['Number of events: %d'%(data[variable].shape[0])])
     if logy:
-        #h = np.histogram(data[variable], bins=1000, range=(0,1000))
-        #print('Board '+str(board_number)+' : '+str(np.max(h[0])))
         ax.set_yscale('log')
 
 def hist2d(ax, input_data, board_number, v1='tot_code', v2='toa_code', num_bins=[100,100], range_hist=[[0,300],[0,300]], title='', xtitle='', ytitle=''):
@@ -32,8 +30,7 @@ def hist2d(ax, input_data, board_number, v1='tot_code', v2='toa_code', num_bins=
     ax.set_ylabel(ytitle, fontsize=13)
 
 def drawPlots(board_number, read_data, plot_dir):
-    px = 1/plt.rcParams['figure.dpi']  # pixel in inches
-    fig, ax = plt.subplots(2,4, constrained_layout=True, figsize=(1600*px, 900*px))
+    fig, ax = plt.subplots(2,4, constrained_layout=True, figsize=(16, 9))
 
     ax[0,0].text(0.5, 0.5, "Board "+str(board_number)+"\nraw data plots", fontsize=20, horizontalalignment='center', verticalalignment='center')
     ax[0,0].axis('off')
@@ -45,8 +42,8 @@ def drawPlots(board_number, read_data, plot_dir):
     hist1d(ax[1,1], read_data, board_number, 'toa', 125, (0,12.5), '', 'TOA (ns)', '')
     hist1d(ax[1,2], read_data, board_number, 'tot', 200, (0,20), '', 'TOT (ns)', '')
     hist2d(ax[1,3], read_data, board_number, 'tot', 'toa', [200,125], [[0,20],[0,12.5]], '', 'ToT (ns)', 'ToA (ns)')
-    
-    plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawData.pdf')
+
+    plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawData.png')
     if options.PDF:
         outfile = plot_dir + '/board'+ str(board_number) + '_rawData.pdf'
         plt.savefig(outfile)
