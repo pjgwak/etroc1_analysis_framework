@@ -104,9 +104,9 @@ def main():
     #print(np.argmax(b0v), np.argmax(b1v), np.argmax(b3v))
     # ToA 7 ns = 228, 8 ns = 187, 9 ns = 145, 10 ns = 104
     # Only if Cal code is 130
-    b0_cuts = [104, 228, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
-    b1_cuts = [104, 228, np.argmax(b1v)-22, np.argmax(b1v)+22,120, 140]
-    b3_cuts = [104, 228, np.argmax(b3v)-22, np.argmax(b3v)+22,120, 140]
+    b0_cuts = [150, 152, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
+    b1_cuts = [150, 152, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 140]
+    b3_cuts = [150, 152, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 140]
 
     
     pd.options.mode.chained_assignment = None
@@ -115,32 +115,36 @@ def main():
     b1v, _ = np.histogram(b1_data['tot'], bins=200, range=(0,20))
     b3v, _ = np.histogram(b3_data['tot'], bins=200, range=(0,20))
     #print(np.argmax(b0v)*0.1, np.argmax(b1v)*0.1, np.argmax(b3v)*0.1)
-    b0_tcuts = [7, 10, np.argmax(b0v)*0.1-1.5, np.argmax(b0v)*0.1+1.5, 120, 140]
-    b1_tcuts = [7, 10, np.argmax(b1v)*0.1-1.5, np.argmax(b1v)*0.1+1.5, 120, 140]
-    b3_tcuts = [7, 10, np.argmax(b3v)*0.1-1.5, np.argmax(b3v)*0.1+1.5, 120, 140]
+    b0_tcuts = [9, 10, np.argmax(b0v)*0.1-1.5, np.argmax(b0v)*0.1+1.02, 120, 140]
+    b1_tcuts = [9, 10, np.argmax(b1v)*0.1-1.5, np.argmax(b1v)*0.1+1.02, 120, 140]
+    b3_tcuts = [9, 10, np.argmax(b3v)*0.1-1.5, np.argmax(b3v)*0.1+1.02, 120, 140]
 
     # Check toa, tot cut for events of each boards
     if options.CODE:
         print('============= Select events with code cuts =============')
-        b0_data['bCut'] = (b0_data['toa_code'] > b0_cuts[0]) & (b0_data['toa_code'] < b0_cuts[1]) & (b0_data['tot_code'] > b0_cuts[2]) & (b0_data['tot_code'] < b0_cuts[3]) & (b0_data['cal_code'] > b0_cuts[4]) & (b0_data['cal_code'] < b0_cuts[5])
-        b1_data['bCut'] = (b1_data['toa_code'] > b1_cuts[0]) & (b1_data['toa_code'] < b1_cuts[1]) & (b1_data['tot_code'] > b1_cuts[2]) & (b1_data['tot_code'] < b1_cuts[3]) & (b1_data['cal_code'] > b1_cuts[4]) & (b1_data['cal_code'] < b1_cuts[5])
-        b3_data['bCut'] = (b3_data['toa_code'] > b3_cuts[0]) & (b3_data['toa_code'] < b3_cuts[1]) & (b3_data['tot_code'] > b3_cuts[2]) & (b3_data['tot_code'] < b3_cuts[3]) & (b3_data['cal_code'] > b3_cuts[4]) & (b3_data['cal_code'] < b3_cuts[5])
+        b0_data['bCut'] = (b0_data['toa_code'] >= b0_cuts[0]) & (b0_data['toa_code'] <= b0_cuts[1]) & (b0_data['tot_code'] >= b0_cuts[2]) & (b0_data['tot_code'] <= b0_cuts[3]) & (b0_data['cal_code'] >= b0_cuts[4]) & (b0_data['cal_code'] <= b0_cuts[5])
+        b1_data['bCut'] = (b1_data['toa_code'] >= b1_cuts[0]) & (b1_data['toa_code'] <= b1_cuts[1]) & (b1_data['tot_code'] >= b1_cuts[2]) & (b1_data['tot_code'] <= b1_cuts[3]) & (b1_data['cal_code'] >= b1_cuts[4]) & (b1_data['cal_code'] <= b1_cuts[5])
+        b3_data['bCut'] = (b3_data['toa_code'] >= b3_cuts[0]) & (b3_data['toa_code'] <= b3_cuts[1]) & (b3_data['tot_code'] >= b3_cuts[2]) & (b3_data['tot_code'] <= b3_cuts[3]) & (b3_data['cal_code'] >= b3_cuts[4]) & (b3_data['cal_code'] <= b3_cuts[5])
     elif options.TIME:
         print('============= Select events with time cuts =============')
-        b0_data['bCut'] = (b0_data['toa'] > b0_tcuts[0]) & (b0_data['toa'] < b0_tcuts[1]) & (b0_data['tot'] > b0_tcuts[2]) & (b0_data['tot'] < b0_tcuts[3]) & (b0_data['cal_code'] > b0_tcuts[4]) & (b0_data['cal_code'] < b0_tcuts[5])
-        b1_data['bCut'] = (b1_data['toa'] > b1_tcuts[0]) & (b1_data['toa'] < b1_tcuts[1]) & (b1_data['tot'] > b1_tcuts[2]) & (b1_data['tot'] < b1_tcuts[3]) & (b1_data['cal_code'] > b1_tcuts[4]) & (b1_data['cal_code'] < b1_tcuts[5])
-        b3_data['bCut'] = (b3_data['toa'] > b3_tcuts[0]) & (b3_data['toa'] < b3_tcuts[1]) & (b3_data['tot'] > b3_tcuts[2]) & (b3_data['tot'] < b3_tcuts[3]) & (b3_data['cal_code'] > b3_tcuts[4]) & (b3_data['cal_code'] < b3_tcuts[5])
-
+        b0_data['bCut'] = (b0_data['toa'] >= b0_tcuts[0]) & (b0_data['toa'] <= b0_tcuts[1]) & (b0_data['tot'] >= b0_tcuts[2]) & (b0_data['tot'] <= b0_tcuts[3]) & (b0_data['cal_code'] >= b0_tcuts[4]) & (b0_data['cal_code'] <= b0_tcuts[5])
+        b1_data['bCut'] = (b1_data['toa'] >= b1_tcuts[0]) & (b1_data['toa'] <= b1_tcuts[1]) & (b1_data['tot'] >= b1_tcuts[2]) & (b1_data['tot'] <= b1_tcuts[3]) & (b1_data['cal_code'] >= b1_tcuts[4]) & (b1_data['cal_code'] <= b1_tcuts[5])
+        b3_data['bCut'] = (b3_data['toa'] >= b3_tcuts[0]) & (b3_data['toa'] <= b3_tcuts[1]) & (b3_data['tot'] >= b3_tcuts[2]) & (b3_data['tot'] <= b3_tcuts[3]) & (b3_data['cal_code'] >= b3_tcuts[4]) & (b3_data['cal_code'] <= b3_tcuts[5])
+    print(b0_data.loc[b0_data['bCut'] == True])
+    print(b1_data.loc[b1_data['bCut'] == True])
+    print(b1_data.loc[b3_data['bCut'] == True])
     # Find good twc events
     # Check event by event, all boards should pass their toa, tot cuts at the same time
     #b0_data['bDelta'] = b0_data['bCut']==True and b1_data['bCut']==True and b3_data['bCut']==True
     b0_data['bTwc'] = (b0_data['bCut']==True) & (b1_data['bCut']==True) & (b3_data['bCut']==True)
     b1_data['bTwc'] = (b0_data['bCut']==True) & (b1_data['bCut']==True) & (b3_data['bCut']==True)
     b3_data['bTwc'] = (b0_data['bCut']==True) & (b1_data['bCut']==True) & (b3_data['bCut']==True)
-
-    #print(b1_data)
+    print(b0_data.loc[b0_data['bTwc'] == True])
+    print(b1_data.loc[b1_data['bTwc'] == True])
+    print(b3_data.loc[b3_data['bTwc'] == True])
     #print(b3_data)
-
+    exit(1)
+    
     b0_twc_delta_data = b0_data.loc[b0_data['bTwc'] == True][['toa','tot']]
     b1_twc_delta_data = b1_data.loc[b1_data['bTwc'] == True][['toa','tot']]
     b3_twc_delta_data = b3_data.loc[b3_data['bTwc'] == True][['toa','tot']]
