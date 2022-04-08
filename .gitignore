@@ -8,6 +8,7 @@
 *.pdf
 *.xlsx
 *.png
+*.dat
 
 # Now developing
 TOA_cut_study/
