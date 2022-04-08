@@ -49,11 +49,11 @@ def main():
     sub_file_dir = dir_path + '/' + file_name + '_sub_file'
 
     b0_corr = pd.read_csv(sub_file_dir + '/' + file_name + '_b0_corr.txt', delimiter = '\s+', header=None)
-    b0_corr.columns = ['toa', 'tot', 'delta_toa', 'corr_toa']
+    b0_corr.columns = ['toa', 'tot', 'cal_code', 'delta_toa', 'corr_toa']
     b1_corr = pd.read_csv(sub_file_dir + '/' + file_name + '_b1_corr.txt', delimiter = '\s+', header=None)
-    b1_corr.columns = ['toa', 'tot', 'delta_toa', 'corr_toa']
+    b1_corr.columns = ['toa', 'tot', 'cal_code', 'delta_toa', 'corr_toa']
     b3_corr = pd.read_csv(sub_file_dir + '/' + file_name + '_b3_corr.txt', delimiter = '\s+', header=None)
-    b3_corr.columns = ['toa', 'tot', 'delta_toa', 'corr_toa']
+    b3_corr.columns = ['toa', 'tot', 'cal_code', 'delta_toa', 'corr_toa']
     print("Read data: Done")
 
     #1. Gaus delta
