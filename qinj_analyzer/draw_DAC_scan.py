@@ -87,10 +87,10 @@ def draw_plots():
     DAC_range = [data_Q5['DAC_value'].min(), data_Q5['DAC_value'].max()]
     nBin = data_Q5['DAC_value'].max() - data_Q5['DAC_value'].min() + 1
     #  plt.plot(data_Q5['DAC_value'], data_Q5['nHit'])
-    plt.plot(data_Q5['DAC_value'], data_Q5['nHit'], 'r--', \
-            data_Q10['DAC_value'], data_Q10['nHit'], 'b--', \
-            data_Q15['DAC_value'], data_Q15['nHit'], 'y--', \
-            data_Q20['DAC_value'], data_Q20['nHit'], 'g--')
+    plt.plot(data_Q5['DAC_value'], data_Q5['nHit'], 'ro--', \
+            data_Q10['DAC_value'], data_Q10['nHit'], 'bs--', \
+            data_Q15['DAC_value'], data_Q15['nHit'], 'y^--', \
+            data_Q20['DAC_value'], data_Q20['nHit'], 'g*--')
     plt.show()
     plt.clf()
 
@@ -138,7 +138,7 @@ def draw_plots():
     plt.ylim(last_points[0]-20, last_points[-1]+20)
     plt.fill([0,0,25,25],[peak_Q5, peak_Q10, peak_Q10, peak_Q5], color='lightgray', alpha=0.8)
     plt.legend()
-    #  plt.show()
+    plt.show()
     plt.clf()
 
 

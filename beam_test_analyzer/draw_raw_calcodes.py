@@ -30,8 +30,12 @@ def hist1d(ax, input_data, board_number, variable='toa_code', num_bins=100, rang
 def drawPlots(board_number, read_data, plot_dir):
     fig, ax = plt.subplots(constrained_layout=True, figsize=(12, 8))
     hist1d(ax, read_data, board_number, 'cal_code', 1000, (0,1000), 'Board '+str(board_number), 'CAL code', 'Number of hits', logy=True)
-
-    plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawCALcode.png')
+    
+    if options.ZOOM:
+        plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawCALcode_zoom.png')
+    else:
+        plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawCALcode.png')
+    
     if options.PDF:
         outfile = plot_dir + '/board'+ str(board_number) + '_rawCALcode.pdf'
         plt.savefig(outfile)

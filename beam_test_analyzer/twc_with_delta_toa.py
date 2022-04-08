@@ -68,15 +68,18 @@ def plotFit(ax, data, v1, v2, popt, title, xtitle, ytitle):
 def draw_board(board_number, input_data, popt, corr_popt, plot_dir):
     fig, ax = plt.subplots(2,3, constrained_layout=True, figsize=(16, 9))
 
-    ax[0,0].text(0.5, 0.5, "Board "+str(board_number)+"\nTime Walk Correction plots", fontsize=18, horizontalalignment='center', verticalalignment='center')
-    ax[0,0].axis('off')
-    plotFit(ax[0,1], input_data, 'tot', 'delta_toa', popt, '', 'ToT (ns)', r'$\Delta$ ToA w/o TWC')
-    plotFit(ax[0,2], input_data, 'tot', 'delta_corr_toa', corr_popt, '', 'ToT (ns)', r'$\Delta$ ToA w/ TWC')
+    #ax[0,0].text(0.5, 0.5, "Board "+str(board_number)+"\nTime Walk Correction plots", fontsize=18, horizontalalignment='center', verticalalignment='center')
+    #ax[0,0].axis('off')
+    hist1d(ax[0,0], input_data, 'cal_code', 100, [100, 200], '', 'Cal code', 'Number of events')
+    
+    plotFit(ax[0,1], input_data, 'tot', 'delta_toa', popt, '', 'TOT (ns)', r'$\Delta$ TOA w/o TWC')
+    plotFit(ax[0,2], input_data, 'tot', 'delta_corr_toa', corr_popt, '', 'TOT (ns)', r'$\Delta$ TOA w/ TWC')
 
-    hist1d(ax[1,0], input_data, 'toa', 125, [0, 12.5], '', 'ToA (ns)', 'Number of events')
-    hist1d(ax[1,1], input_data, 'tot', 200, [0, 20.0], '', 'ToT (ns)', 'Number of events')
-    hist2d(ax[1,2], input_data, 'tot', 'toa', [200,125], [[0,20.0],[0,12.5]], '', 'ToT (ns)', 'ToA (ns)')
+    hist1d(ax[1,0], input_data, 'toa', 125, [0, 12.5], '', 'TOA (ns)', 'Number of events')
+    hist1d(ax[1,1], input_data, 'tot', 200, [0, 20.0], '', 'TOT (ns)', 'Number of events')
+    hist2d(ax[1,2], input_data, 'tot', 'toa', [200,125], [[0,20.0],[0,12.5]], '', 'TOT (ns)', 'TOA (ns)')
 
+    fig.suptitle("Board "+str(board_number)+" Time Walk Correction plots", fontsize=18)
     extraArg = ''
     if options.CODE:
         extraArg = 'byCode'
@@ -115,11 +118,11 @@ def main():
     b1v, _ = np.histogram(b1_data['tot_code'], bins=300, range=(0,300))
     b3v, _ = np.histogram(b3_data['tot_code'], bins=300, range=(0,300))
     #print(np.argmax(b0v), np.argmax(b1v), np.argmax(b3v))
-    # ToA 7 ns = 228, 8 ns = 187, 9 ns = 145, 10 ns = 104
+    # TOA 7 ns = 228, 8 ns = 187, 9 ns = 145, 10 ns = 104
     # Only if Cal code is 130
-    b0_cuts = [150, 152, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
-    b1_cuts = [150, 152, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 140]
-    b3_cuts = [150, 152, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 140]
+    b0_cuts = [104, 228, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
+    b1_cuts = [104, 228, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 140]
+    b3_cuts = [104, 228, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 140]
 
 
     ####  ####
@@ -165,9 +168,9 @@ def main():
         print(b1_data.loc[b1_data['bTwc'] == True])
         print(b3_data.loc[b3_data['bTwc'] == True], '\n')
 
-    b0_twc_delta_data = b0_data.loc[b0_data['bTwc'] == True][['toa','tot']]
-    b1_twc_delta_data = b1_data.loc[b1_data['bTwc'] == True][['toa','tot']]
-    b3_twc_delta_data = b3_data.loc[b3_data['bTwc'] == True][['toa','tot']]
+    b0_twc_delta_data = b0_data.loc[b0_data['bTwc'] == True][['toa','tot','cal_code']]
+    b1_twc_delta_data = b1_data.loc[b1_data['bTwc'] == True][['toa','tot','cal_code']]
+    b3_twc_delta_data = b3_data.loc[b3_data['bTwc'] == True][['toa','tot','cal_code']]
     b0_twc_delta_data['delta_toa'] = (b1_twc_delta_data['toa'] + b3_twc_delta_data['toa'])*0.5 - b0_twc_delta_data['toa']
     b1_twc_delta_data['delta_toa'] = (b0_twc_delta_data['toa'] + b3_twc_delta_data['toa'])*0.5 - b1_twc_delta_data['toa']
     b3_twc_delta_data['delta_toa'] = (b0_twc_delta_data['toa'] + b1_twc_delta_data['toa'])*0.5 - b3_twc_delta_data['toa']
@@ -182,7 +185,7 @@ def main():
     #draw_delta_toa_fit(b0_twc_delta_data, popt0)
 
     # Calculate toa w/ TWC
-    #x-axis ToT
+    #x-axis TOT
     #y-axis B1 TOA: (b0_toa + b3_toa)/2 - b1_toa
     b0_twc_delta_data['corr_toa'] = b0_twc_delta_data['toa'] + quad_func(b0_twc_delta_data['tot'].values, *popt0)
     b1_twc_delta_data['corr_toa'] = b1_twc_delta_data['toa'] + quad_func(b1_twc_delta_data['tot'].values, *popt1)
@@ -196,7 +199,7 @@ def main():
     b3_twc_delta_data.to_csv(sub_file_dir+'/'+file_name+'_b3_corr.txt', sep='\t', index=None, header=None)
 
 
-    # To draw delta ToA with corrected ToA.
+    # To draw delta TOA with corrected TOA.
     # Don't need to save.
     b0_twc_delta_data['delta_corr_toa'] = (b1_twc_delta_data['corr_toa'] + b3_twc_delta_data['corr_toa'])*0.5 - b0_twc_delta_data['corr_toa']
     b1_twc_delta_data['delta_corr_toa'] = (b0_twc_delta_data['corr_toa'] + b3_twc_delta_data['corr_toa'])*0.5 - b1_twc_delta_data['corr_toa']
@@ -211,6 +214,7 @@ def main():
     draw_board(0, b0_twc_delta_data, popt0, corr_popt0, plot_dir)
     draw_board(1, b1_twc_delta_data, popt1, corr_popt1, plot_dir)
     draw_board(3, b3_twc_delta_data, popt3, corr_popt3, plot_dir)
+    #print(b0_twc_delta_data)
 
 
 if __name__ == '__main__':

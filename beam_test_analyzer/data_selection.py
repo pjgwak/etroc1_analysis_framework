@@ -5,7 +5,7 @@
 # 3. Convert raw data codes to time in ns (raw data codes: ToA/ToT/CAL codes)
 # 
 # ### Convert formula ####
-# fbin = 3.125 / 170 # 3.125 came from theory, 170 is fixed cal code from empirical experiences
+# fbin = 3.125 / 170 # 3.125 came from theory, 170 is fixed cal code from peak of Cal code distribution
 # fToa = 12.5 - fToaCode * fbin; # 12.5 from TDC design
 # fTot= (fTotCode*2 - np.floor(fTotCode/32.)) * fbin # 32 came from the TDC property of tot
 ###############################################
@@ -33,16 +33,10 @@ sub_file_dir = dir_path + '/' + file_name + '_sub_file'
 #        os.makedirs(plot_dir)
 #except OSError:
 #    print('Error: Cannot creat plot directory')
-#
-#try:
-#    if not os.path.exists(sub_file_dir):
-#        os.makedirs(sub_file_dir)
-#except OSError:
-#    print('Error: Cannot creat sub file directory')
 
 codes_data = pd.read_csv(dir_path + '/' + file_name + '.txt', delimiter = '\s+', header=None, skiprows=1)
-codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'dummy1', 'dummy2']
-codes_data = codes_data.drop(['dummy1', 'dummy2'], axis=1)
+codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'day', 'time']
+codes_data = codes_data.drop(['day', 'time'], axis=1)
 print("Read data: Done")
 
 if options.PRINT:
