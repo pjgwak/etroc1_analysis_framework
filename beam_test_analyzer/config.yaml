@@ -70,10 +70,19 @@
 #file_name: F9P5_F11P5_F5P5_Beam
 
 # Apr. 05 -> B1's Cal code peak has tails
-#dir_path: 2022-04-05_Array_Test_Results
-#file_name: F9P5_F11P5_F5P9_Beam
+dir_path: 2022-04-05_Array_Test_Results
+file_name: F9P5_F11P5_F5P9_Beam
 
 
 # Apr. 08 (from midnight of Thurs)
+#dir_path: 2022-04-08_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam
+
+# Uncertainty study
 dir_path: 2022-04-08_Array_Test_Results
-file_name: F9P5_F11P5_F5P5_Beam
+file_name: am1p13_2p13.txt
+file_name: am2p13_3p13.txt
+file_name: am3p13_4p13.txt
+file_name: am4p13_5p13.txt
+file_name: am5p13_6p13.txt
+file_name: am6p00_7p33.txt
