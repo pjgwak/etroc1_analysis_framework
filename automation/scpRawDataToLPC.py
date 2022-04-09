@@ -11,7 +11,7 @@ parser.add_option('-d', '--directory', help='directory', dest='directory')
 parser.add_option('-u', '--user', help='username', dest='USER')
 parser.add_option('-r', '--restart', action='store_true', default=False, dest='RESTART')
 parser.add_option('-c', '--count', dest='COUNT')
-parser.add_option('-n', '--name', default='TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P5_QSel0_DAC560', help='name', dest='NAME')
+parser.add_option('-n', '--name', default='TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P9_QSel0_DAC595', help='name', dest='NAME')
 (options, args) = parser.parse_args()
 #####################
 #####################
@@ -42,7 +42,7 @@ while True:
     files_to_process = SetRawFiles - copiedRawFiles
 
     dname = 'dataset_%d'%(count)
-    destination = '/uscms_data/d1/'+options.USER+'/ETROC/2022-03-29_Array_Test_Results/'+dname
+    destination = '/uscms_data/d1/'+options.USER+'/ETROC/2022-04-05_Array_Test_Results_F9P5_F11P5_F5P9/'+dname
 
     if len(files_to_process) == 0:
         print('No file to copy')
@@ -50,12 +50,12 @@ while True:
         time.sleep(60)
         continue
     else:
-        print('\n================================')
+        print('\n=============================')
         print('Which dataset?', dname)
-        print('================================')
+        print('=============================')
         for run in files_to_process:
             fname = '%s_%i.dat' % (options.NAME, run)
-            cmd = 'scp %s/%s %s@cmslpc-sl7.fnal.gov:%s/%s' % (options.directory, fname, options.USER, destination, fname)
+            cmd = 'scp -p %s/%s %s@cmslpc-sl7.fnal.gov:%s/%s' % (options.directory, fname, options.USER, destination, fname) ## -p option to preserve created time
             #print(cmd)
             os.system(cmd)
             ListcopiedRawFiles.append(run)
@@ -66,7 +66,7 @@ while True:
     count += 1
 
     #break
-    print('=========== Sleep 3 minutes ============')
+    print('\n=========== Sleep 3 minutes ===========')
     print('If you want to stop, please press CTRL + C at this point')
     print('Otherwise the process will be messed up')
     print('========================================\n\n')
