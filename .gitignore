@@ -11,9 +11,9 @@
 *.dat
 
 # Now developing
-TOA_cut_study/
 
 
 # Personal test codes. pjgwak
+split.bash
 personal_show_codes_distributions.py
 pdf_png.py
