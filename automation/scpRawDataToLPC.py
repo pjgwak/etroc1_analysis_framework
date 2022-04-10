@@ -3,7 +3,6 @@ import time
 from optparse import OptionParser
 import os
 import shutil
-from natsort import natsorted
 
 #####################
 ### Configure options
@@ -43,7 +42,7 @@ while True:
     files_to_process = SetRawFiles - copiedRawFiles
 
     dname = 'dataset_%d'%(count)
-    destination = '/uscms_data/d1/'+options.USER+'/ETROC/2022-04-09_Array_Test_Results_F9P5_F11P5_F5P5_HV225/'+dname
+    destination = '/uscms_data/d1/'+options.USER+'/ETROC/2022-04-09_Array_Test_Results_F9P5_F11P5_F5P5_HV220/'+dname
 
     if len(files_to_process) == 0:
         print('No file to copy')
@@ -61,7 +60,7 @@ while True:
             os.system(cmd)
             ListcopiedRawFiles.append(run)
 
-        ListcopiedRawFiles = natsorted(ListcopiedRawFiles, key=lambda y: y.lower())
+        ListcopiedRawFiles = sorted(ListcopiedRawFiles)
         #### Copy the last copied file
         shutil.copy('%s/%s_%i.dat'%(options.directory, options.NAME, ListcopiedRawFiles[-1]), 'temp/')
 
