@@ -70,7 +70,7 @@ def draw_board(board_number, input_data, popt, corr_popt, plot_dir):
 
     #ax[0,0].text(0.5, 0.5, "Board "+str(board_number)+"\nTime Walk Correction plots", fontsize=18, horizontalalignment='center', verticalalignment='center')
     #ax[0,0].axis('off')
-    hist1d(ax[0,0], input_data, 'cal_code', 100, [100, 200], '', 'Cal code', 'Number of events')
+    hist1d(ax[0,0], input_data, 'cal_code', 20, [120, 140], '', 'Cal code', 'Number of events')
     
     plotFit(ax[0,1], input_data, 'tot', 'delta_toa', popt, '', 'TOT (ns)', r'$\Delta$ TOA w/o TWC')
     plotFit(ax[0,2], input_data, 'tot', 'delta_corr_toa', corr_popt, '', 'TOT (ns)', r'$\Delta$ TOA w/ TWC')

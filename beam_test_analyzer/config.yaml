@@ -78,8 +78,7 @@
 #dir_path: 2022-04-08_Array_Test_Results
 #file_name: F9P5_F11P5_F5P5_Beam
 
-# Uncertainty study
-#dir_path: 2022-04-08_Array_Test_Results
+# Seperate by time
 #file_name: am1p13_2p13
 #file_name: am2p13_3p13
 #file_name: am3p13_4p13
@@ -87,4 +86,31 @@
 #file_name: am5p13_6p13
 #file_name: am6p00_7p33
 
+
+# Apr. 09
+#dir_path: 2022-04-09_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam_HV235
+
+# Seperate by time
+#file_name: am1p18_2p18
+#file_name: am2p18_3p18
+#file_name: am3p18_4p18
+#file_name: am4p18_5p18
+#file_name: am5p18_6p45
+
+# 230 V
+#file_name: F9P5_F11P5_F5P5_Beam_HV230
+
+# 225 V
+#file_name: F9P5_F11P5_F5P5_Beam_HV225
+
+# 220 V
+#file_name: F9P5_F11P5_F5P5_Beam_HV220
+
+
+# Apr.10
+dir_path: 2022-04-10_Array_Test_Results
+#file_name: F9P5_F11P5_F5P5_Beam_HV215
+
+file_name: F9P5_F11P5_F5P5_Beam_HV210
 
