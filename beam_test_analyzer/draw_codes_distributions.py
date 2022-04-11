@@ -56,10 +56,10 @@ def main():
     plot_dir = dir_path + '/' + file_name + '_plot'
     sub_file_dir = dir_path + '/' + file_name + '_sub_file'
 
-    read_data = pd.read_csv(sub_file_dir+'/'+file_name+'.txt', delimiter = '\s+', header=None)
+    read_data = pd.read_csv(sub_file_dir+'/'+file_name+'_aligned.txt', delimiter = '\s+', header=None)
     read_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'toa', 'tot']
     print("Read data: Done")
-
+    
     for board_number in [0, 1, 3]:
         drawPlots(board_number, read_data, plot_dir)
 
