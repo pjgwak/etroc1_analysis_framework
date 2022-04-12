@@ -2,18 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from glob import glob
-#from optparse import OptionParser
+from optparse import OptionParser
 import os
 from natsort import natsorted
-#from scipy.optimize import curve_fit
-#from scipy.stats import norm
+from scipy.optimize import curve_fit
 
 #####################
 ### Configure options
-#parser = OptionParser()
-#parser.add_option('-n', '--name', default='TDC_Data_PhaseAdj0_F9P5_QSel0_DAC543_F11P5_QSel0_DAC536_F5P5_QSel0_DAC560', help='name', dest='NAME')
-#parser.add_option('-o', '--output', default='', help='output name', dest='OUTPUT')
-#(options, args) = parser.parse_args()
+parser = OptionParser()
+parser.add_option('-f', '--fit', action="store_true", dest='fit')
+(options, args) = parser.parse_args()
 #####################
 #####################
 
@@ -73,6 +71,17 @@ for i in range(3):
             else:
                 selected_data.to_csv(output, sep='\t', index=None, header=None)
 
+
+def expoFit(x, a, b, c):
+    return a*np.exp(b*x) + c
+
+def poly3(x, a, b, c, d):
+    return a*x**3 + b*x**2 + c*x + d
+
+def poly2(x, a, b, c):
+    return a*x**2 + b*x**1 + c
+
+##### Draw charge vs. mean TOT #####
 for i in range(3):
     fig, ax = plt.subplots(figsize=(10, 8))
     x = np.arange(5, 32, 1)
@@ -80,6 +89,12 @@ for i in range(3):
     yerr = np.zeros(x.size)
     for iq in Qsel:
         f = txt_names[i] % iq
+        fig1, ax1 = plt.subplots(figsize=(8,8))
+
+        if iq < 9:
+            y[iq-5] = np.NaN
+            yerr[iq-5] = np.NaN
+            continue
 
         if not os.path.exists(f):
             print('File is not existed')
@@ -90,27 +105,52 @@ for i in range(3):
         else:
             data = pd.read_csv(f, delimiter = '\s+', header=None)
             data.columns = ['board', 'tot']
-            if iq < 12:
-                y[iq-5] = np.NaN
-                yerr[iq-5] = np.NaN
-            else:
+            if data.size < 100:
+                print('Not enough of number events for fit')
+                print('Ignore this point')
                 y[iq-5] = np.mean(data['tot'])
                 yerr[iq-5] = np.std(data['tot'], ddof=1)
-            #print(iq, 'fc', '%.4f, %.5f'%(np.mean(data['tot']), np.std(data['tot'], ddof=1)), '\n')
+                continue
+            if options.fit:
+                print('Do Gaussian fit')
+                num_bins = 40
+                bins, edges = np.histogram(data['tot'], num_bins, range=(0.0, 4.0), density=False)
+                centers = 0.5*(edges[1:] + edges[:-1])
+                mean, sigma = np.mean(data['tot']), np.std(data['tot'], ddof=1)
+                try:
+                    popt, _ = curve_fit(gaus, centers, bins, p0=[100, mean, sigma])
+                    y[iq-5] = popt[1]
+                    yerr[iq-5] = popt[2]
+                    ax1.hist(data['tot'], num_bins, range=(0.0, 4.0), density=False)
+                    ax1.plot(centers, gaus(centers, *popt), color='red', lw=2)
+                    ax1.set_title('Board'+str(bID[i])+'_'+str(iq)+'fC', fontsize=15)
+                    ax1.set_xlabel('TOT (ns)', fontsize=15)
+                    fig1.savefig('Board'+str(bID[i])+'_'+str(iq)+'fC'+'_gaussianFit.png')
+                except:
+                    print('Gaussian fit failed!!')
+                    y[iq-5] = np.mean(data['tot'])
+                    yerr[iq-5] = np.std(data['tot'], ddof=1)
+                    ax1.hist(data['tot'], num_bins, range=(0.0, 4.0), density=False)
+                    ax1.set_title('Board'+str(bID[i])+'_'+str(iq)+'fC', fontsize=15)
+                    ax1.set_xlabel('TOT (ns)', fontsize=15)
+                    fig1.savefig('Board'+str(bID[i])+'_'+str(iq)+'fC'+'_gaussianFit.png')
+            else:
+                if iq < 12:
+                    y[iq-5] = np.NaN
+                    yerr[iq-5] = np.NaN
+                else:
+                    y[iq-5] = np.mean(data['tot'])
+                    yerr[iq-5] = np.std(data['tot'], ddof=1)
 
-            #num_bins = 30
-            #bins, edges = np.histogram(data['tot'], num_bins, range=(0.0, 4.5), density=False)
-            #centers = 0.5*(edges[1:] + edges[:-1])
-            #mean, sigma = np.mean(data['tot']), np.std(data['tot'], ddof=1)
-            #try:
-            #    popt, _ = curve_fit(gaus, centers, bins, p0=[100, mean, sigma])
-            #    print(iq, 'fc', '%.7f'%(popt[1]))
-            #except:
-            #    print('Gaussian fit failed!!')
+    #try:
+    #    popt, _ = curve_fit(expoFit, x[7:] , y[7:])
+    #    ax.plot(x[7:], expoFit(x[7:], *popt), color='red', lw=2)
+    #except:
+    #    print("Fit doesn't work!!")
     ax.errorbar(x, y, yerr=yerr, marker='o', ms=5, mfc='black', mew=0, elinewidth=2)
     ax.set_title('Board '+str(bID[i]), fontsize=15)
     ax.set_xlabel('Charge (fC)', fontsize=15)
-    ax.set_xticks(np.arange(11, 33, 1))
+    ax.set_xticks(np.arange(5, 33, 1))
     ax.set_ylabel('Mean TOT (ns)', fontsize=15)
     ax.set_ylim(0, 4.5)
     ax.grid()
