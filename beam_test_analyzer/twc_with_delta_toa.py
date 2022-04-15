@@ -47,6 +47,8 @@ def hist2d(ax, data, v1='tot', v2='toa', num_bins=[200,125], range_hist=[[0,20.0
         plt.sca(ax)
     plt.hist2d(data[v1], data[v2], cmap=plt.cm.jet, bins=num_bins, range=range_hist, cmin=1)
     plt.colorbar()
+    ax.plot(np.NaN, np.NaN, '-', color='none', label='') ## empty template only for legend
+    ax.legend(['X mean: %.3f, Y mean %.3f'%(np.mean(data[v1]), np.mean(data[v2]))], loc='upper right')
     ax.set_title(title)
     ax.set_xlabel(xtitle, fontsize=13)
     ax.set_ylabel(ytitle, fontsize=13)
