@@ -120,9 +120,9 @@ def main():
     #print(np.argmax(b0v), np.argmax(b1v), np.argmax(b3v))
     # TOA 7 ns = 228, 8 ns = 187, 9 ns = 145, 10 ns = 104
     # Only if Cal code is 130
-    b0_cuts = [104, 228, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
-    b1_cuts = [104, 228, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 140]
-    b3_cuts = [104, 228, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 140]
+    b0_cuts = [104, 228, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 131]
+    b1_cuts = [104, 228, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 131]
+    b3_cuts = [104, 228, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 131]
 
 
     ####  ####

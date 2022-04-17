@@ -43,7 +43,7 @@ def seperate_cal_code(board_number, data, plot_dir):
         print('{:.4f}'.format(temp_data.mean()))
         
         plt.savefig(plot_dir + '/board'+str(board_number)+'_part'+str(idx)+ '_TWC.png')
-        plt.clf()
+        #  plt.clf()
         lower = upper + 1
         upper += step
         
@@ -125,8 +125,8 @@ def main():
     b3_twc_delta_data = b3_data.loc[b3_data['bTwc'] == True][['toa','tot','cal_code']]
 
     #seperate_cal_code(0, b0_twc_delta_data, plot_dir)
-    #seperate_cal_code(1, b1_twc_delta_data, plot_dir)
-    seperate_cal_code(3, b3_twc_delta_data, plot_dir)
+    seperate_cal_code(1, b1_twc_delta_data, plot_dir)
+    #seperate_cal_code(3, b3_twc_delta_data, plot_dir)
     
 
 if __name__ == '__main__':

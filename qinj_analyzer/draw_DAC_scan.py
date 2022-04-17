@@ -1,5 +1,6 @@
 import os
 import glob
+import yaml
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -17,11 +18,9 @@ def poly1(x, a, b):
 
 #  def
 
-def process_data(Q_value = 5):
-    # Make file list -> Use config file?
-    folder_path = '2022-04-14_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
-    DAC_value = 320 # Start value of DAC
-    file_list = glob.glob(folder_path + '/*_QSel=' + str(Q_value) + '_*.dat')
+def process_data(Q_value, dir_path, DAC_value):
+    sub_file_dir = dir_path + '/sub_file'
+    file_list = glob.glob(dir_path + '/*_QSel=' + str(Q_value) + '_*.dat')
     file_list.sort()
    
     result_list = []
@@ -65,7 +64,7 @@ def process_data(Q_value = 5):
             DAC_value += 2
 
     # create the file to gather data (Always overwrite)
-    with open('q' + str(Q_value) + '_test.txt', 'w+') as f:
+    with open(sub_file_dir + '/q' + str(Q_value) + '.txt', 'w+') as f:
         for sub_list in result_list:
             for ele in sub_list:
                 f.write(str(ele))
@@ -74,15 +73,21 @@ def process_data(Q_value = 5):
 
 class Painter:
     def __init__(self):
-        self.read_data_files()
+        pass
     
+    def set_path(self, plot_dir, sub_file_dir, board, pixel):
+        self.plot_dir = plot_dir
+        self.sub_file_dir = sub_file_dir
+        self.board = board
+        self.pixel = pixel
+        
     def read_data_files(self):
-        self.data_Q5 = pd.read_csv('q5_test.txt', delimiter = '\s+', header=None)
-        self.data_Q10 = pd.read_csv('q10_test.txt', delimiter = '\s+', header=None)
-        self.data_Q15 = pd.read_csv('q15_test.txt', delimiter = '\s+', header=None)
-        self.data_Q20 = pd.read_csv('q20_test.txt', delimiter = '\s+', header=None)
-        self.data_Q25 = pd.read_csv('q25_test.txt', delimiter = '\s+', header=None)
-        self.data_Q30 = pd.read_csv('q30_test.txt', delimiter = '\s+', header=None)
+        self.data_Q5 = pd.read_csv(self.sub_file_dir + '/q5.txt', delimiter = '\s+', header=None)
+        self.data_Q10 = pd.read_csv(self.sub_file_dir + '/q10.txt', delimiter = '\s+', header=None)
+        self.data_Q15 = pd.read_csv(self.sub_file_dir + '/q15.txt', delimiter = '\s+', header=None)
+        self.data_Q20 = pd.read_csv(self.sub_file_dir + '/q20.txt', delimiter = '\s+', header=None)
+        self.data_Q25 = pd.read_csv(self.sub_file_dir + '/q25.txt', delimiter = '\s+', header=None)
+        self.data_Q30 = pd.read_csv(self.sub_file_dir + '/q30.txt', delimiter = '\s+', header=None)
         self.data_Q5.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q10.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q15.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
@@ -91,7 +96,7 @@ class Painter:
         self.data_Q30.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
 
 
-    def draw_DAC_hit(self):
+    def draw_S_curve(self):
         # Draw DAC-Hits
         DAC_range = [self.data_Q5['DAC_value'].min(), self.data_Q5['DAC_value'].max()]
         nBin = self.data_Q5['DAC_value'].max() - self.data_Q5['DAC_value'].min() + 1
@@ -103,17 +108,31 @@ class Painter:
                 self.data_Q25['DAC_value'], self.data_Q25['nHit'], 'o--',\
                 self.data_Q30['DAC_value'], self.data_Q30['nHit'], 'p--'
                 )
-        plt.show()
+        plt.title(self.board + 'P' + str(self.pixel) + ' S curve')
+        plt.xlabel('DAC')
+        plt.ylabel('# of hits')
+        #plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'], 'ro--', \
+        #        self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'bs--'
+        #        )
+        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_S_curve.png', dpi=300)
+        #plt.show()
     
     def find_noise_region(self):
+        plt.clf()
         data = self.data_Q5.diff()
-        peak_idx = data['nHit'].nlargest(2).index.values
-        self.first_peak_DAC = self.data_Q5['DAC_value'][peak_idx[0]]
-        self.second_peak_DAC = self.data_Q5['DAC_value'][peak_idx[1]]
+        peak1 = data['nHit'].nlargest(1).index.values
+        peak2 = data['nHit'].nsmallest(1).index.values
+        self.first_peak_DAC = self.data_Q5['DAC_value'][peak1[0]]
+        self.second_peak_DAC = self.data_Q5['DAC_value'][peak2[0]]
         plt.plot(self.data_Q5['DAC_value'], data['nHit'], 'ro--')
-        plt.show()
+        plt.title(self.board + 'P' + str(self.pixel) + ' noise check')
+        plt.xlabel('DAC')
+        plt.ylabel('Difference # of hits')
+        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_noise.png', dpi=300)
+        #plt.show()
 
-    def draw_S_curve(self):
+    def draw_DAC_line(self):
+        plt.clf()
         # Find last point of signal
         # Get maximum DAC_value which has non-zero nHit
         last_Q5 = self.data_Q5['DAC_value'].loc[self.data_Q5['nHit'] != 0].max()
@@ -122,8 +141,10 @@ class Painter:
         last_Q20 = self.data_Q20['DAC_value'].loc[self.data_Q20['nHit'] != 0].max()
         last_Q25 = self.data_Q25['DAC_value'].loc[self.data_Q25['nHit'] != 0].max()
         last_Q30 = self.data_Q30['DAC_value'].loc[self.data_Q30['nHit'] != 0].max()
-        last_points = np.asarray([last_Q5, last_Q10, last_Q15, last_Q20, last_Q25, last_Q30])
-        q_list = np.asarray([5, 10, 15, 20, 25, 30])
+        #last_points = np.asarray([last_Q5, last_Q10, last_Q15, last_Q20, last_Q25, last_Q30])
+        #q_list = np.asarray([5, 10, 15, 20, 25, 30])
+        last_points = np.asarray([last_Q15, last_Q20, last_Q25, last_Q30])
+        q_list = np.asarray([15, 20, 25, 30])
         qx_temp = np.arange(0,33,1)
         #  print(last_Q5)
 
@@ -135,8 +156,13 @@ class Painter:
         plt.xlim(0,33)
         plt.ylim(self.first_peak_DAC-10, last_points[-1]+20)
         plt.fill([0,0,33,33],[self.first_peak_DAC, self.second_peak_DAC, self.second_peak_DAC, self.first_peak_DAC], color='lightgray', alpha=0.8)
+        plt.text(10,(self.second_peak_DAC+self.first_peak_DAC)/2, 'Noise: {:} - {:}'.format(self.first_peak_DAC, self.second_peak_DAC))
         plt.legend()
-        plt.show()
+        plt.title(self.board + 'P' + str(self.pixel) + ' DAC scan')
+        plt.xlabel('Current (fC)')
+        plt.ylabel('DAC')
+        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + 'DAC_scan.png', dpi=300)
+        #plt.show()
         #plt.clf()
         
 
@@ -153,14 +179,37 @@ class Painter:
         
 
 def main():
-    for charge in [5, 10, 15, 20, 25, 30]:
-        process_data(charge)
-    my_painter = Painter()
-    my_painter.draw_DAC_hit()
-    my_painter.find_noise_region()
-    my_painter.draw_S_curve()
-    
+    with open('config.yaml') as f:
+        conf = yaml.load(f, Loader=yaml.FullLoader)
+    dir_path = conf['dir_path']
+    DAC_value = conf['DAC_value']
+    pixel = conf['pixel']
+    board = conf['board']
+    plot_dir = dir_path + '/plot'
+    sub_file_dir = dir_path + '/sub_file'
+    try:
+        if not os.path.exists(plot_dir):
+            os.makedirs(plot_dir)
+    except OSError:
+        print('Error: Cannot creat plot directory')
 
+    try:
+        if not os.path.exists(sub_file_dir):
+            os.makedirs(sub_file_dir)
+    except OSError:
+        print('Error: Cannot creat sub file directory')
+        
+        
+    for charge in [5, 10, 15, 20, 25, 30]:
+        process_data(charge, dir_path, DAC_value)
+    
+    my_painter = Painter()
+    my_painter.set_path(plot_dir, sub_file_dir, board, pixel)
+    my_painter.read_data_files()
+    my_painter.draw_S_curve()
+    my_painter.find_noise_region()
+    my_painter.draw_DAC_line()
+    
 
 if __name__ == '__main__':
     main()
