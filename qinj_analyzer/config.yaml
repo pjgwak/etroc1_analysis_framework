@@ -1,0 +1,95 @@
+# pixel 0
+#dir_path: '2022-04-15_Array_Test_Results/Jitter_Performance_P0_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+#DAC_value: 380
+#board: 'F27'
+#pixel: 0
+
+# pixel 1
+dir_path: '2022-04-15_Array_Test_Results/Jitter_Performance_P1_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+DAC_value: 380
+board: 'F27'
+pixel: 1
+
+# pixel 2
+# dir_path: '2022-04-15_Array_Test_Results/Jitter_Performance_P2_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 380
+# board: 'F27'
+# pixel: 2
+
+# pixel 3
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P3_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 340
+# board: 'F27'
+# pixel: 3
+
+# pixel 4
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P4_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 360
+# board: 'F27'
+# pixel: 4
+
+# pixel 5
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 320
+# board: 'F27'
+# pixel: 5
+
+# pixel 6
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P6_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 320
+# board: 'F27'
+# pixel: 6
+
+# pixel 7
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P7_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 280
+# board: 'F27'
+# pixel: 7
+
+# pixel 8
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P8_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 380
+# board: 'F27'
+# pixel: 8
+
+# pixel 9
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P9_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 380
+# board: 'F27'
+# pixel: 9
+
+# pixel 10
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P10_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 360
+# board: 'F27'
+# pixel: 10
+
+# pixel 11
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P11_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 300
+# board: 'F27'
+# pixel: 11
+
+# pixel 12
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P12_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 420
+# board: 'F27'
+# pixel: 12
+
+# pixel 13
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P13_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 400
+# board: 'F27'
+# pixel: 13
+
+# pixel 14
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P14_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 380
+# board: 'F27'
+# pixel: 14
+
+# pixel 15
+# dir_path: '2022-04-16_Array_Test_Results/Jitter_Performance_P15_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+# DAC_value: 340
+# board: 'F27'
+# pixel: 15

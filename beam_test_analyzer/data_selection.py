@@ -41,7 +41,7 @@ def code_to_time(data, cal0 = 130, cal1 = 130, cal3 = 130):
     
     if options.PRINT:
         print('============ Print converted ToA and ToT (ns) ============')
-        print(selected_data.head, '\n')
+        print(aligned_data.head, '\n')
     print("Transform raw codes to time (ns): Done")
     
     
@@ -59,44 +59,44 @@ def main():
     #except OSError:
     #    print('Error: Cannot creat plot directory')
     
-    codes_data = pd.read_csv(dir_path + '/' + file_name + '.txt', delimiter = '\s+',    header=None, skiprows=1)
-    codes_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'day', 'time']
-    codes_data = codes_data.drop(['day', 'time'], axis=1)
+    raw_data = pd.read_csv(dir_path + '/' + file_name + '.txt', delimiter = '\s+',    header=None, skiprows=1)
+    raw_data.columns = ['board', 'toa_code', 'tot_code', 'cal_code', 'flag', 'day', 'time']
+    raw_data = raw_data.drop(['day', 'time'], axis=1)
     print("Read data: Done")
     
     if options.PRINT:
         print('============ Print loaded raw dataset ============')
-        print(codes_data.head, '\n')
+        print(raw_data.head, '\n')
     
-    raw_cal_codes = codes_data[['board', 'cal_code']]
+    raw_cal_codes = raw_data[['board', 'cal_code']]
     raw_cal_codes.to_csv(sub_file_dir+'/'+file_name+'_cal_codes.txt', sep='\t', index=None,     header=None)
     print("Save raw cal codes to txt")
     
-    selected_data = codes_data.loc[codes_data['flag'] >= 1]
-    selected_data.reset_index(inplace=True, drop=True)
+    aligned_data = raw_data.loc[raw_data['flag'] >= 1]
+    aligned_data.reset_index(inplace=True, drop=True)
     print("Exclude flag 0 cases: Done")
     if options.PRINT:
         print('============ Print dataset with hitflag = 1 ============')
-        print(selected_data.head, '\n')
+        print(aligned_data.head, '\n')
     
     pattern = [0, 1, 3]
-    matched = selected_data.rolling(len(pattern)).apply(lambda x: all(np.equal(x, pattern)),    raw=True)
+    matched = aligned_data.rolling(len(pattern)).apply(lambda x: all(np.equal(x, pattern)),    raw=True)
     # 'raw=True' -> Handle as numpy array instead of Pandas' DataFrame -> Much Faster
     matched = matched.sum(axis = 1).astype(bool)   #Sum to perform boolean OR
     idx_matched = np.where(matched)[0]
     subset = [range(match-len(pattern)+1, match+1) for match in idx_matched]
-    selected_data = pd.concat([selected_data.iloc[subs,:] for subs in subset], axis = 0)
-    selected_data.reset_index(inplace=True, drop=True)
+    aligned_data = pd.concat([aligned_data.iloc[subs,:] for subs in subset], axis = 0)
+    aligned_data.reset_index(inplace=True, drop=True)
     print("Check 0, 1, 3 patterns: Done")
     if options.PRINT:
         print('============ Print selected good events (Board Id 0 1 3 aligned) in dataset  ============')
-        print(selected_data.head, '\n')
-    selected_data.drop(['flag'], axis=1, inplace = True)
+        print(aligned_data.head, '\n')
+    aligned_data.drop(['flag'], axis=1, inplace = True)
     
-    code_to_time(selected_data, 130, 130, 130)
+    code_to_time(aligned_data, 129.15, 130.63, 128.17)
     
     #  Save the selected events to txt file
-    selected_data.to_csv(sub_file_dir+'/'+file_name+'_aligned.txt', sep='\t', index=None,   header=None)
+    aligned_data.to_csv(sub_file_dir+'/'+file_name+'_aligned.txt', sep='\t', index=None,   header=None)
     print("Save the aligend events to txt")
 
 
