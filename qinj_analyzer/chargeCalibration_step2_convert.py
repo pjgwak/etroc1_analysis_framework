@@ -15,22 +15,23 @@ from scipy.optimize import curve_fit
 #####################
 #####################
 
-out_names = ['files/TDC_Data_PhaseAdj0_F9P5_QSel%i_DAC551_F15P5_QSel20_DAC542_F5P5_QSel20_DAC566.txt',
-             'files/TDC_Data_PhaseAdj0_F9P5_QSel20_DAC551_F15P5_QSel%i_DAC542_F5P5_QSel20_DAC566.txt',
-             'files/TDC_Data_PhaseAdj0_F9P5_QSel20_DAC551_F15P5_QSel20_DAC542_F5P5_QSel%i_DAC566.txt'
+out_names = ['files/TDC_Data_PhaseAdj0_F5P5_QSel%i_DAC583_F17P5_QSel20_DAC435_B2P5_QSel20_DAC541.txt',
+             'files/TDC_Data_PhaseAdj0_F5P5_QSel20_DAC583_F17P5_QSel%i_DAC435_B2P5_QSel20_DAC541.txt',
+             'files/TDC_Data_PhaseAdj0_F5P5_QSel20_DAC583_F17P5_QSel20_DAC435_B2P5_QSel%i_DAC541.txt'
             ]
-
-txt_names = ['files/TDC_Data_PhaseAdj0_F9P5_QSel%i_DAC551.txt',
-             'files/TDC_Data_PhaseAdj0_F15P5_QSel%i_DAC542.txt',
-             'files/TDC_Data_PhaseAdj0_F5P5_QSel%i_DAC566.txt'
+            
+txt_names = ['files/TDC_Data_PhaseAdj0_F5P5_QSel%i_DAC583.txt',
+             'files/TDC_Data_PhaseAdj0_F17P5_QSel%i_DAC435.txt',
+             'files/TDC_Data_PhaseAdj0_B2P5_QSel%i_DAC541.txt'
             ]
 
 bID = [0, 1, 3]
 Qsel = np.arange(8, 32, 1)
 
 #cal_code_cut = [[127, 129], [129, 131], [126, 128]] ## Apr 10 data (F9, F11, F5)
-cal_code_cut = [[138, 140], [138, 140], [137, 139]] ## Apr 28 data (F9, F15, F5)
-charge_cut = [8, 8, 8]
+#cal_code_cut = [[138, 140], [138, 140], [137, 139]] ## Apr 28 data (F9, F15, F5)
+cal_code_cut = [[145, 150], [145, 149], [139, 144]] ## May 20 data (F5, F17, B2)
+charge_cut = [8, 10, 10]
 
 ##### Convert to time #####
 for i in range(3):

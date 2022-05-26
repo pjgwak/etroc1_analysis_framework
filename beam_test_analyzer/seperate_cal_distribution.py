@@ -77,9 +77,9 @@ def main():
     #print(np.argmax(b0v), np.argmax(b1v), np.argmax(b3v))
     # TOA 7 ns = 228, 8 ns = 187, 9 ns = 145, 10 ns = 104
     # Only if Cal code is 130
-    b0_cuts = [104, 228, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 140]
-    b1_cuts = [104, 228, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 140]
-    b3_cuts = [104, 228, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 140]
+    b0_cuts = [104, 228, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 131]
+    b1_cuts = [104, 228, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 131]
+    b3_cuts = [104, 228, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 131]
 
 
     ####  ####
@@ -125,8 +125,8 @@ def main():
     b3_twc_delta_data = b3_data.loc[b3_data['bTwc'] == True][['toa','tot','cal_code']]
 
     #seperate_cal_code(0, b0_twc_delta_data, plot_dir)
-    seperate_cal_code(1, b1_twc_delta_data, plot_dir)
-    #seperate_cal_code(3, b3_twc_delta_data, plot_dir)
+    #seperate_cal_code(1, b1_twc_delta_data, plot_dir)
+    seperate_cal_code(3, b3_twc_delta_data, plot_dir)
     
 
 if __name__ == '__main__':

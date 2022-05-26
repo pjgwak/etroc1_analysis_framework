@@ -23,14 +23,14 @@ def hist1d(ax, input_data, board_number, variable='toa_code', num_bins=100, rang
     if logy:
         ax.set_yscale('log')
     if options.ZOOM:
-        ax.set_xlim(int(options.ZOOM)-10, int(options.ZOOM)+10)
-        ax.set_xticks(np.arange(int(options.ZOOM)-10, int(options.ZOOM)+10, 1))
+        ax.set_xlim(int(options.ZOOM)-30, int(options.ZOOM)+30)
+        ax.set_xticks(np.arange(int(options.ZOOM)-30, int(options.ZOOM)+30, 1))
         ax.grid(axis='x')
+        plt.show()
 
 def drawPlots(board_number, read_data, plot_dir):
-    fig, ax = plt.subplots(constrained_layout=True, figsize=(12, 8))
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(11, 7))
     hist1d(ax, read_data, board_number, 'cal_code', 1000, (0,1000), 'Board '+str(board_number), 'CAL code', 'Number of hits', logy=True)
-    
     if options.ZOOM:
         plt.savefig(plot_dir + '/board'+ str(board_number) + '_rawCALcode_zoom.png')
     else:

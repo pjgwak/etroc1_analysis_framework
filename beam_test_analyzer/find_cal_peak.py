@@ -60,6 +60,7 @@ def printArgMax(board_number, input_data):
     bins, _ = np.histogram(data['cal_code'], bins=100, range=(100,200))
     print('Board '+str(board_number)+' : '+str(np.argmax(bins)))
 
+
 def main():
     with open('config.yaml') as f:
         conf = yaml.load(f, Loader=yaml.FullLoader)
@@ -85,7 +86,7 @@ def main():
     print("Read data: Done")
     
     
-    cal_cuts = [120, 131, 120, 131, 120, 131]
+    cal_cuts = [145, 150, 145, 149, 139, 144]
     b0_data = raw_data.loc[raw_data['board']==0]
     b1_data = raw_data.loc[raw_data['board']==1]
     b3_data = raw_data.loc[raw_data['board']==3]

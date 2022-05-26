@@ -122,9 +122,9 @@ def main():
     #print(np.argmax(b0v), np.argmax(b1v), np.argmax(b3v))
     # TOA 7 ns = 228, 8 ns = 187, 9 ns = 145, 10 ns = 104
     # Only if Cal code is 130
-    b0_cuts = [104, 228, np.argmax(b0v)-22, np.argmax(b0v)+22, 120, 131]
-    b1_cuts = [104, 228, np.argmax(b1v)-22, np.argmax(b1v)+22, 120, 131]
-    b3_cuts = [104, 228, np.argmax(b3v)-22, np.argmax(b3v)+22, 120, 131]
+    b0_cuts = [104, 228, np.argmax(b0v)-22, np.argmax(b0v)+22, 136, 156]
+    b1_cuts = [104, 228, np.argmax(b1v)-22, np.argmax(b1v)+22, 136, 156]
+    b3_cuts = [104, 228, np.argmax(b3v)-22, np.argmax(b3v)+22, 130, 150]
 
 
     ####  ####
@@ -134,9 +134,9 @@ def main():
     b0v, _ = np.histogram(b0_data['tot'], bins=200, range=(0,20))
     b1v, _ = np.histogram(b1_data['tot'], bins=200, range=(0,20))
     b3v, _ = np.histogram(b3_data['tot'], bins=200, range=(0,20))
-    b0_tcuts = [7, 10, np.argmax(b0v)*0.1-1.02, np.argmax(b0v)*0.1+1.02, 120, 140]
-    b1_tcuts = [7-par0[1], 10-par0[1], np.argmax(b1v)*0.1-1.02, np.argmax(b1v)*0.1+1.02, 120, 140]
-    b3_tcuts = [7-par1[1], 10-par1[1], np.argmax(b3v)*0.1-1.02, np.argmax(b3v)*0.1+1.02, 120, 140]
+    b0_tcuts = [7, 10, np.argmax(b0v)*0.1-1.02, np.argmax(b0v)*0.1+1.02, 136, 156]
+    b1_tcuts = [7-par0[1], 10-par0[1], np.argmax(b1v)*0.1-1.02, np.argmax(b1v)*0.1+1.02, 136, 156]
+    b3_tcuts = [7-par1[1], 10-par1[1], np.argmax(b3v)*0.1-1.02, np.argmax(b3v)*0.1+1.02, 130, 150]
 
     # Check toa, tot cut for events of each boards
     if options.CODE:

@@ -22,6 +22,7 @@ parser = OptionParser()
 parser.add_option('-p', '--print', help='Print dataset during execution', action='store_true', default=False, dest='PRINT')
 (options, args) = parser.parse_args()
 
+
 def code_to_time(data, cal0 = 130, cal1 = 130, cal3 = 130):
     fbin0 = 3.125 / cal0
     fbin1 = 3.125 / cal1
@@ -43,7 +44,7 @@ def code_to_time(data, cal0 = 130, cal1 = 130, cal3 = 130):
         print('============ Print converted ToA and ToT (ns) ============')
         print(aligned_data.head, '\n')
     print("Transform raw codes to time (ns): Done")
-    
+
     
 def main():
     with open('config.yaml') as f:
@@ -93,8 +94,8 @@ def main():
         print(aligned_data.head, '\n')
     aligned_data.drop(['flag'], axis=1, inplace = True)
     
-    code_to_time(aligned_data, 129.15, 130.63, 128.17)
-    
+    code_to_time(aligned_data, 146.9, 146.4, 140.7)
+
     #  Save the selected events to txt file
     aligned_data.to_csv(sub_file_dir+'/'+file_name+'_aligned.txt', sep='\t', index=None,   header=None)
     print("Save the aligend events to txt")

@@ -11,7 +11,7 @@
 *.dat
 
 # Now developing
-
+beam_test_analyzer/aaa_On_developing_beam_analyzer_main.py
 
 # Personal test codes. pjgwak
 beam_test_analyzer/**/split.sh

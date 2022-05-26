@@ -1,3 +1,4 @@
+#### F27 ####
 # pixel 0
 #dir_path: '2022-04-15_Array_Test_Results/Jitter_Performance_P0_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
 #DAC_value: 380
@@ -5,10 +6,10 @@
 #pixel: 0
 
 # pixel 1
-dir_path: '2022-04-15_Array_Test_Results/Jitter_Performance_P1_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
-DAC_value: 380
-board: 'F27'
-pixel: 1
+#dir_path: '2022-04-15_Array_Test_Results/Jitter_Performance_P1_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+#DAC_value: 380
+#board: 'F27'
+#pixel: 1
 
 # pixel 2
 # dir_path: '2022-04-15_Array_Test_Results/Jitter_Performance_P2_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
@@ -93,3 +94,46 @@ pixel: 1
 # DAC_value: 340
 # board: 'F27'
 # pixel: 15
+
+# Laser
+#pixel: 0
+#dir_path: '2022-04-26_Array_Test_Results/Jitter_Performance_P0_Laser=1M25_external_PhaseAdj0_F27_DiscriOn_QInjDisable_PreBuffOff_DACScan'
+#DAC_value: 400 # - 556
+#board: 'F27'
+
+
+
+#### F14 ####
+#IBSel 7
+#dir_path: '2022-04-26_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F14_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+#dir_path: '2022-04-27_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F14_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+#DAC_value: 380
+#board: 'F14'
+#pixel: 5
+
+#IBSel 0
+#dir_path: '2022-04-29_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F14_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+#DAC_value: 400
+#board: 'F14'
+#pixel: 5
+
+
+#### F15 ####
+#pixel: 5
+#dir_path: '2022-04-27_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F15_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+#DAC_value: 360
+#board: 'F15'
+
+
+#### F17 ####
+#pixel: 5
+#dir_path: '2022-04-29_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F17_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+#DAC_value: 400 # -520
+#board: 'F17'
+
+
+#### F12 ####
+pixel: 5
+dir_path: '2022-05-05_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F12_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+DAC_value: 400 # -520
+board: 'F12'

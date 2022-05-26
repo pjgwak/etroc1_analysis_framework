@@ -36,14 +36,14 @@ def hist2d(ax, data, v1='tot_code', v2='toa_code', num_bins=[100,100], range_his
     ax.set_yticks(np.arange(range_hist[1][0], range_hist[1][1], step))
     ax.grid()
 
-in_names = ['files/TDC_Data_PhaseAdj0_F9P5_QSel%i_DAC551_F15P5_QSel20_DAC542_F5P5_QSel20_DAC566_Split*',
-            'files/TDC_Data_PhaseAdj0_F9P5_QSel20_DAC551_F15P5_QSel%i_DAC542_F5P5_QSel20_DAC566_Split*',
-            'files/TDC_Data_PhaseAdj0_F9P5_QSel20_DAC551_F15P5_QSel20_DAC542_F5P5_QSel%i_DAC566_Split*'
+in_names = ['files/TDC_Data_PhaseAdj0_F5P5_QSel%i_DAC583_F17P5_QSel20_DAC435_B2P5_QSel20_DAC541_Split*',
+            'files/TDC_Data_PhaseAdj0_F5P5_QSel20_DAC583_F17P5_QSel%i_DAC435_B2P5_QSel20_DAC541_Split*',
+            'files/TDC_Data_PhaseAdj0_F5P5_QSel20_DAC583_F17P5_QSel20_DAC435_B2P5_QSel%i_DAC541_Split*'
            ]
 
-out_names = ['files/TDC_Data_PhaseAdj0_F9P5_QSel%i_DAC551_F15P5_QSel20_DAC542_F5P5_QSel20_DAC566.txt',
-             'files/TDC_Data_PhaseAdj0_F9P5_QSel20_DAC551_F15P5_QSel%i_DAC542_F5P5_QSel20_DAC566.txt',
-             'files/TDC_Data_PhaseAdj0_F9P5_QSel20_DAC551_F15P5_QSel20_DAC542_F5P5_QSel%i_DAC566.txt'
+out_names = ['files/TDC_Data_PhaseAdj0_F5P5_QSel%i_DAC583_F17P5_QSel20_DAC435_B2P5_QSel20_DAC541.txt',
+             'files/TDC_Data_PhaseAdj0_F5P5_QSel20_DAC583_F17P5_QSel%i_DAC435_B2P5_QSel20_DAC541.txt',
+             'files/TDC_Data_PhaseAdj0_F5P5_QSel20_DAC583_F17P5_QSel20_DAC435_B2P5_QSel%i_DAC541.txt'
             ]
 
 bID = [0, 1, 3]
@@ -68,7 +68,7 @@ print('======== Done ========')
 if not os.path.exists('rawData'):
     os.makedirs('rawData')
 
-charge_cut = [8, 8, 8]
+charge_cut = [8, 10, 10]
 
 print('======== plotting ========')
 for i in range(3):
@@ -96,7 +96,7 @@ for i in range(3):
         fig2, axes2 = plt.subplots(figsize=(12,8), constrained_layout=True, sharey=True)
         hist2d(axes2, selected_data, 'tot_code', 'toa_code', num_bins=[100, 100], range_hist=[[0, 100], [130, 230]], xtitle='TOT code', ytitle='TOA code')
         fig2.suptitle('Board'+str(bID[i])+'_'+str(iq)+'fC', fontsize=16)
-        fig2.savefig('rawData/Board'+str(bID[i])+'_'+str(iq)+'fC_rawData_TOTvsTOA.png')
+        fig2.savefig('rawData/a/Board'+str(bID[i])+'_'+str(iq)+'fC_rawData_TOTvsTOA.png')
 
         #### CAL code mean and standard deviation ####
         y[iq-9] = np.mean(selected_data['cal_code'])
@@ -108,5 +108,5 @@ for i in range(3):
     axes3.set_yticks(np.arange(130, 160, 5))
     axes3.set_ylabel('Mean CAL code', fontsize=15)
     axes3.grid()
-    fig3.savefig('rawData/board'+str(bID[i])+'chargeVScalcode.png')
+    fig3.savefig('rawData/b/board'+str(bID[i])+'chargeVScalcode.png')
 print('======== Done ========')
