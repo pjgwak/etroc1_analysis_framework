@@ -9,6 +9,13 @@
 *.xlsx
 *.png
 *.dat
+<<<<<<< HEAD
+*.gz
+*.tar.gz
+*.tar
+*.zip
+=======
+>>>>>>> 89a4277967293567b9014a6e1e105107c0959c5f
 
 # Now developing
 beam_test_analyzer/aaa_On_developing_beam_analyzer_main.py
