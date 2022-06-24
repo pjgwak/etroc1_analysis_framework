@@ -133,7 +133,13 @@
 
 
 #### F12 ####
+#pixel: 5
+#dir_path: '2022-05-05_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F12_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+#DAC_value: 400 # -520
+#board: 'F12'
+
+#### F27 ####
 pixel: 5
-dir_path: '2022-05-05_Array_Test_Results/Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F12_DiscriOn_QInjEnable_PreBuffOff_DACScan'
-DAC_value: 400 # -520
-board: 'F12'
+dir_path: 'Jitter_Performance_P5_QInj=1M25_external_PhaseAdj0_F27_DiscriOn_QInjEnable_PreBuffOff_DACScan'
+DAC_value: 360 # -520
+board: 'F27'
