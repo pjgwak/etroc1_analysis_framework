@@ -124,33 +124,23 @@ class Painter:
 
     def timewalk_plot(self):
         fig, ax = plt.subplots(figsize=(8, 8), constrained_layout=True)
-        hh = ax.hist2d(self.data['tot'], self.data['toa'], bins=[16,12], range=[[1.8,2.6],[8.4,9.0]], cmin=1)
+        hh = ax.hist2d(self.data['tot'], self.data['toa'], bins=[30,20], range=[[3.0, 4.5],[9.5, 10.5]], cmin=1)
         ax.set_xlabel('TOT (ns)', fontsize=13)
         ax.set_ylabel('TOA (ns)', fontsize=13)
         ax.grid()
         fig.colorbar(hh[3], ax=ax)
 
         popt, _ = curve_fit(poly3, self.data['tot'], self.data['toa'])
-        #ax.plot(self.data['tot'], poly3(self.data['tot'], *popt), 'r--')
-        x = np.linspace(1.8, 2.6, num=120)
+        x = np.linspace(self.data['tot']-0.1, self.data['tot']+0.1, num=50)
         ax.plot(x, poly3(x, *popt), 'r--')
-        #min2, max2 = self.data['corrToa'].min()-0.1, self.data['corrToa'].max()+0.1
-        #mean2, std2 = self.data['corrToa'].mean(), self.data['corrToa'].std()
-        #ax2.hist(self.data['corrToa'], bins=10, histtype='step', label='mean = %.3g\nsigma = %.3g'%(mean2,std2))
-        #ax2.set_xlim(min2, max2)
-        #ax2.set_xlabel('corrected TOA (ns)', fontsize=13)
-        #ax2.legend(loc='best')
-
-        #popt, pcov = curve_fit(poly3, self.data['tot'], self.data['toa'])
-
-        fig.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_DAC' + str(options.dac) + '_TDC_2Dfit.png', dpi=300)
+        fig.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_laser' + str(options.laser) + '_DAC' + str(options.dac) + '_TDC_2Dfit.png', dpi=300)
 
     def compareTOA(self):
         fig1, (ax1, ax2) = plt.subplots(2, 1, figsize=(11, 9), constrained_layout=True)
         mean1, std1 = self.data['toa'].mean(), self.data['toa'].std()
         mean2, std2 = self.data['corrToa'].mean(), self.data['corrToa'].std()
 
-        ax1.hist(self.data['toa'], bins=75, range=(8.0, 9.5), histtype='step', label='mean = %.3g\nstd = %.3g'%(mean1,std1))
+        ax1.hist(self.data['toa'], bins=50, range=(9.5, 10.5), histtype='step', label='mean = %.3g\nstd = %.3g'%(mean1,std1))
         ax1.set_xlabel('TOA before TWC (ns)', fontsize=13)
         ax1.legend(loc='best')
 
@@ -190,9 +180,9 @@ def main():
     my_painter = Painter()
     my_painter.set_path(plot_dir, sub_file_dir, pixel)
     my_painter.read_data_files()
-    my_painter.draw_distribution()
+    #my_painter.draw_distribution()
     #my_painter.timewalk_plot()
-    #my_painter.compareTOA()
+    my_painter.compareTOA()
 
 if __name__ == '__main__':
     main()
