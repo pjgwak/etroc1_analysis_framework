@@ -16,7 +16,6 @@ def cut_date(data):
 def poly1(x, a, b):
     return a*x + b
 
-#  def
 
 def process_data(Q_value, dir_path, DAC_value):
     sub_file_dir = dir_path + '/sub_file'
@@ -86,13 +85,13 @@ class Painter:
         self.data_Q10 = pd.read_csv(self.sub_file_dir + '/q8550.txt', delimiter = '\s+', header=None)
         self.data_Q15 = pd.read_csv(self.sub_file_dir + '/q8600.txt', delimiter = '\s+', header=None)
         self.data_Q20 = pd.read_csv(self.sub_file_dir + '/q8650.txt', delimiter = '\s+', header=None)
-        #self.data_Q25 = pd.read_csv(self.sub_file_dir + '/q25.txt', delimiter = '\s+', header=None)
+        self.data_Q25 = pd.read_csv(self.sub_file_dir + '/q8700.txt', delimiter = '\s+', header=None)
         #self.data_Q30 = pd.read_csv(self.sub_file_dir + '/q30.txt', delimiter = '\s+', header=None)
         self.data_Q5.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q10.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q15.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q20.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
-        #self.data_Q25.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
+        self.data_Q25.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         #self.data_Q30.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
 
 
@@ -110,15 +109,16 @@ class Painter:
                 self.data_Q30['DAC_value'], self.data_Q30['nHit'], 'p--'
                 )
         '''
-        plt.title(self.board + 'P' + str(self.pixel) + ' S curve')
+        plt.title(self.board + 'P' + str(self.pixel) + ' DAC Scan')
         plt.xlabel('DAC')
-        plt.ylabel('# of hits')
-        plt.plot(self.data_Q5['DAC_value'], self.data_Q50['nHit'], 'g--', \
-                self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'ro--', \
-                self.data_Q15['DAC_value'], self.data_Q15['nHit'], 'y^--', \
-                self.data_Q20['DAC_value'], self.data_Q20['nHit'], 'bs--'
-                )
-        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_S_curve.png', dpi=300)
+        plt.ylabel('# of Hits')
+        plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'], 'gv--', label='85 %')
+        plt.plot(self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'ro--', label='85.5 %')
+        plt.plot(self.data_Q15['DAC_value'], self.data_Q15['nHit'], 'y^--', label='86 %')
+        plt.plot(self.data_Q20['DAC_value'], self.data_Q20['nHit'], 'bs--', label='86.5 %')
+        plt.plot(self.data_Q25['DAC_value'], self.data_Q20['nHit'], 'mP--', label='87 %')
+        plt.legend(loc='upper right')
+        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_DAC_scan.png', dpi=300)
         #plt.show()
     
     def find_noise_region(self):
@@ -143,14 +143,14 @@ class Painter:
         last_Q10 = self.data_Q10['DAC_value'].loc[self.data_Q10['nHit'] != 0].max()
         last_Q15 = self.data_Q15['DAC_value'].loc[self.data_Q15['nHit'] != 0].max()
         last_Q20 = self.data_Q20['DAC_value'].loc[self.data_Q20['nHit'] != 0].max()
-        #last_Q25 = self.data_Q25['DAC_value'].loc[self.data_Q25['nHit'] != 0].max()
+        last_Q25 = self.data_Q25['DAC_value'].loc[self.data_Q25['nHit'] != 0].max()
         #last_Q30 = self.data_Q30['DAC_value'].loc[self.data_Q30['nHit'] != 0].max()
         #last_points = np.asarray([last_Q5, last_Q10, last_Q15, last_Q20, last_Q25, last_Q30])
         #q_list = np.asarray([5, 10, 15, 20, 25, 30])
         #last_points = np.asarray([last_Q15, last_Q20, last_Q25, last_Q30])
         #q_list = np.asarray([15, 20, 25, 30])
-        last_points = np.asarray([last_Q5, last_Q10, last_Q15, last_Q20])
-        q_list = np.asarray([85, 85.5, 86, 86.5])
+        last_points = np.asarray([last_Q5, last_Q10, last_Q15, last_Q20, last_Q25])
+        q_list = np.asarray([85, 85.5, 86, 86.5, 87])
         qx_temp = np.arange(0,100,1)
         #  print(last_Q5)
 
@@ -160,14 +160,14 @@ class Painter:
     
         plt.plot(q_list, last_points, 'bo')
         plt.xlim(0,100)
-        #plt.ylim(self.first_peak_DAC-10, last_points[-1]+20)
+        plt.ylim(self.first_peak_DAC-10, last_points[-1]+200)
         plt.fill([0,0,100,100],[self.first_peak_DAC, self.second_peak_DAC, self.second_peak_DAC, self.first_peak_DAC], color='lightgray', alpha=0.8)
         plt.text(10,(self.second_peak_DAC+self.first_peak_DAC)/2, 'Noise: {:} - {:}'.format(self.first_peak_DAC, self.second_peak_DAC))
         plt.legend()
-        plt.title(self.board + 'P' + str(self.pixel) + ' DAC scan')
+        plt.title(self.board + 'P' + str(self.pixel) + ' S Curve')
         plt.xlabel('Attenuation (%)')
-        plt.ylabel('DAC')
-        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + 'DAC_scan.png', dpi=300)
+        plt.ylabel('DAC value')
+        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_S_curve.png', dpi=300)
         #plt.show()
         #plt.clf()
         
@@ -207,7 +207,7 @@ def main():
         
         
     #for charge in [5, 10, 15, 20, 25, 30]:
-    for charge in [8500, 8550, 8600, 8650]:
+    for charge in [8500, 8550, 8600, 8650, 8700]:
         process_data(charge, dir_path, DAC_value)
 
     my_painter = Painter()
