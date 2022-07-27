@@ -82,18 +82,18 @@ class Painter:
         self.pixel = pixel
         
     def read_data_files(self):
-        #self.data_Q5 = pd.read_csv(self.sub_file_dir + '/q5.txt', delimiter = '\s+', header=None)
+        self.data_Q5 = pd.read_csv(self.sub_file_dir + '/q5.txt', delimiter = '\s+', header=None)
         self.data_Q10 = pd.read_csv(self.sub_file_dir + '/q10.txt', delimiter = '\s+', header=None)
         self.data_Q15 = pd.read_csv(self.sub_file_dir + '/q15.txt', delimiter = '\s+', header=None)
         self.data_Q20 = pd.read_csv(self.sub_file_dir + '/q20.txt', delimiter = '\s+', header=None)
         self.data_Q25 = pd.read_csv(self.sub_file_dir + '/q25.txt', delimiter = '\s+', header=None)
-        #self.data_Q30 = pd.read_csv(self.sub_file_dir + '/q30.txt', delimiter = '\s+', header=None)
-        #self.data_Q5.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
+        self.data_Q30 = pd.read_csv(self.sub_file_dir + '/q30.txt', delimiter = '\s+', header=None)
+        self.data_Q5.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q10.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q15.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q20.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q25.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
-        #self.data_Q30.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
+        self.data_Q30.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
 
 
     def draw_S_curve(self):
@@ -101,24 +101,18 @@ class Painter:
         DAC_range = [self.data_Q10['DAC_value'].min(), self.data_Q10['DAC_value'].max()]
         nBin = self.data_Q10['DAC_value'].max() - self.data_Q10['DAC_value'].min() + 1
         #  plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'])
-        '''
-        plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'], 'ro--', \
-                self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'bs--', \
-                self.data_Q15['DAC_value'], self.data_Q15['nHit'], 'y^--', \
-                self.data_Q20['DAC_value'], self.data_Q20['nHit'], 'g*--', \
-                self.data_Q25['DAC_value'], self.data_Q25['nHit'], 'o--',\
-                self.data_Q30['DAC_value'], self.data_Q30['nHit'], 'p--'
-                )
-        '''
-        plt.title(self.board + 'P' + str(self.pixel) + ' S curve')
+
+        plt.title(self.board + 'P' + str(self.pixel) + ' DAC Scan')
         plt.xlabel('DAC')
         plt.ylabel('# of hits')
-        plt.plot(self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'ro--', \
-                self.data_Q15['DAC_value'], self.data_Q15['nHit'], 'y^--', \
-                self.data_Q20['DAC_value'], self.data_Q20['nHit'], 'bs--', \
-                self.data_Q25['DAC_value'], self.data_Q25['nHit'], 'o--'
-                )
-        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_S_curve.png', dpi=300)
+        plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'], 'ro--', label='Q = 5 fC')
+        plt.plot(self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'bs--', label='Q = 10 fC')
+        plt.plot(self.data_Q15['DAC_value'], self.data_Q15['nHit'], 'y^--', label='Q = 15 fC')
+        plt.plot(self.data_Q20['DAC_value'], self.data_Q20['nHit'], 'g*--', label='Q = 10 fC')
+        plt.plot(self.data_Q25['DAC_value'], self.data_Q25['nHit'], 'go--', label='Q = 25 fC')
+        plt.plot(self.data_Q30['DAC_value'], self.data_Q30['nHit'], 'p--', label='Q = 30 fC', color="orange")
+        plt.legend(loc='upper right')
+        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_DAC_scan.png', dpi=300)
         #plt.show()
     
     def find_noise_region(self):
@@ -144,13 +138,13 @@ class Painter:
         last_Q15 = self.data_Q15['DAC_value'].loc[self.data_Q15['nHit'] != 0].max()
         last_Q20 = self.data_Q20['DAC_value'].loc[self.data_Q20['nHit'] != 0].max()
         last_Q25 = self.data_Q25['DAC_value'].loc[self.data_Q25['nHit'] != 0].max()
-        #last_Q30 = self.data_Q30['DAC_value'].loc[self.data_Q30['nHit'] != 0].max()
+        last_Q30 = self.data_Q30['DAC_value'].loc[self.data_Q30['nHit'] != 0].max()
         #last_points = np.asarray([last_Q5, last_Q10, last_Q15, last_Q20, last_Q25, last_Q30])
         #q_list = np.asarray([5, 10, 15, 20, 25, 30])
         #last_points = np.asarray([last_Q15, last_Q20, last_Q25, last_Q30])
         #q_list = np.asarray([15, 20, 25, 30])
-        last_points = np.asarray([last_Q10, last_Q15, last_Q20, last_Q25])
-        q_list = np.asarray([10, 15, 20, 25])
+        last_points = np.asarray([last_Q10, last_Q15, last_Q20, last_Q25, last_Q30])
+        q_list = np.asarray([10, 15, 20, 25, 30])
         qx_temp = np.arange(0,33,1)
         #  print(last_Q5)
 
@@ -164,10 +158,10 @@ class Painter:
         plt.fill([0,0,33,33],[self.first_peak_DAC, self.second_peak_DAC, self.second_peak_DAC, self.first_peak_DAC], color='lightgray', alpha=0.8)
         plt.text(10,(self.second_peak_DAC+self.first_peak_DAC)/2, 'Noise: {:} - {:}'.format(self.first_peak_DAC, self.second_peak_DAC))
         plt.legend()
-        plt.title(self.board + 'P' + str(self.pixel) + ' DAC scan')
+        plt.title(self.board + 'P' + str(self.pixel) + ' S curve')
         plt.xlabel('Current (fC)')
         plt.ylabel('DAC')
-        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + 'DAC_scan.png', dpi=300)
+        plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_S_curve.png', dpi=300)
         #plt.show()
         #plt.clf()
         
@@ -207,7 +201,7 @@ def main():
         
         
     #for charge in [5, 10, 15, 20, 25, 30]:
-    for charge in [10, 15, 20, 25]:
+    for charge in [5, 10, 15, 20, 25, 30]:
         process_data(charge, dir_path, DAC_value)
     
     my_painter = Painter()
