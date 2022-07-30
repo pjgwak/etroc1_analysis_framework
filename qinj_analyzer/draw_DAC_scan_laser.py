@@ -81,11 +81,19 @@ class Painter:
         self.pixel = pixel
         
     def read_data_files(self):
+        
         self.data_Q5 = pd.read_csv(self.sub_file_dir + '/q8500.txt', delimiter = '\s+', header=None)
         self.data_Q10 = pd.read_csv(self.sub_file_dir + '/q8550.txt', delimiter = '\s+', header=None)
         self.data_Q15 = pd.read_csv(self.sub_file_dir + '/q8600.txt', delimiter = '\s+', header=None)
         self.data_Q20 = pd.read_csv(self.sub_file_dir + '/q8650.txt', delimiter = '\s+', header=None)
         self.data_Q25 = pd.read_csv(self.sub_file_dir + '/q8700.txt', delimiter = '\s+', header=None)
+        '''
+        self.data_Q5 = pd.read_csv(self.sub_file_dir + '/q7500.txt', delimiter = '\s+', header=None)
+        self.data_Q10 = pd.read_csv(self.sub_file_dir + '/q7600.txt', delimiter = '\s+', header=None)
+        self.data_Q15 = pd.read_csv(self.sub_file_dir + '/q7700.txt', delimiter = '\s+', header=None)
+        self.data_Q20 = pd.read_csv(self.sub_file_dir + '/q7800.txt', delimiter = '\s+', header=None)
+        self.data_Q25 = pd.read_csv(self.sub_file_dir + '/q7900.txt', delimiter = '\s+', header=None)
+        '''
         #self.data_Q30 = pd.read_csv(self.sub_file_dir + '/q30.txt', delimiter = '\s+', header=None)
         self.data_Q5.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
         self.data_Q10.columns = ['DAC_value', 'nHit', 'TOA_code_mean', 'TOT_code_mean', 'Cal_code_mean', 'TOA_rms']
@@ -100,32 +108,38 @@ class Painter:
         DAC_range = [self.data_Q10['DAC_value'].min(), self.data_Q10['DAC_value'].max()]
         nBin = self.data_Q10['DAC_value'].max() - self.data_Q10['DAC_value'].min() + 1
         #  plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'])
-        '''
-        plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'], 'ro--', \
-                self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'bs--', \
-                self.data_Q15['DAC_value'], self.data_Q15['nHit'], 'y^--', \
-                self.data_Q20['DAC_value'], self.data_Q20['nHit'], 'g*--', \
-                self.data_Q25['DAC_value'], self.data_Q25['nHit'], 'o--',\
-                self.data_Q30['DAC_value'], self.data_Q30['nHit'], 'p--'
-                )
-        '''
         plt.title(self.board + 'P' + str(self.pixel) + ' DAC Scan')
         plt.xlabel('DAC')
         plt.ylabel('# of Hits')
-        plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'], 'gv--', label='85 %')
+        '''
+        plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'], 'gv--', label='75 %')
+        plt.plot(self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'ro--', label='76 %')
+        plt.plot(self.data_Q15['DAC_value'], self.data_Q15['nHit'], 'y^--', label='77 %')
+        plt.plot(self.data_Q20['DAC_value'], self.data_Q20['nHit'], 'bs--', label='78 %')
+        plt.plot(self.data_Q25['DAC_value'], self.data_Q20['nHit'], 'mP--', label='79 %')
+        '''
+        
         plt.plot(self.data_Q10['DAC_value'], self.data_Q10['nHit'], 'ro--', label='85.5 %')
+        plt.plot(self.data_Q5['DAC_value'], self.data_Q5['nHit'], 'gv--', label='85 %')
         plt.plot(self.data_Q15['DAC_value'], self.data_Q15['nHit'], 'y^--', label='86 %')
         plt.plot(self.data_Q20['DAC_value'], self.data_Q20['nHit'], 'bs--', label='86.5 %')
         plt.plot(self.data_Q25['DAC_value'], self.data_Q20['nHit'], 'mP--', label='87 %')
         plt.legend(loc='upper right')
+        
+        handles, labels = plt.gca().get_legend_handles_labels()
+        #specify order of items in legend
+        order = [1,0,2,3,4]
+        #add legend to plot
+        plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order]) 
+
         plt.savefig(self.plot_dir + '/pixel'+ str(self.pixel) + '_DAC_scan.png', dpi=300)
         #plt.show()
     
     def find_noise_region(self):
         plt.clf()
         data = self.data_Q5.diff()
-        peak1 = data['nHit'].nlargest(1).index.values
-        peak2 = data['nHit'].nsmallest(1).index.values
+        peak1 = data['nHit'].nlargest(2).index.values
+        peak2 = data['nHit'].nsmallest(2).index.values
         self.first_peak_DAC = self.data_Q5['DAC_value'][peak1[0]]
         self.second_peak_DAC = self.data_Q5['DAC_value'][peak2[0]]
         plt.plot(self.data_Q5['DAC_value'], data['nHit'], 'ro--')
@@ -151,6 +165,7 @@ class Painter:
         #q_list = np.asarray([15, 20, 25, 30])
         last_points = np.asarray([last_Q5, last_Q10, last_Q15, last_Q20, last_Q25])
         q_list = np.asarray([85, 85.5, 86, 86.5, 87])
+        #q_list = np.asarray([75, 76, 77, 78, 79])
         qx_temp = np.arange(0,100,1)
         #  print(last_Q5)
 
@@ -208,6 +223,7 @@ def main():
         
     #for charge in [5, 10, 15, 20, 25, 30]:
     for charge in [8500, 8550, 8600, 8650, 8700]:
+    #for charge in [7500, 7600, 7700, 7800, 7900]:
         process_data(charge, dir_path, DAC_value)
 
     my_painter = Painter()
